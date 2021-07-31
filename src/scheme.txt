@@ -1,0 +1,11 @@
+GameObject > Phaser.Image
+    - speed
+
+Player > GameObject
+    - health
+
+Food > GameObject
+    - saturation (степень насыщения хомы)
+
+Enemy > GameObject
+    - damage 
