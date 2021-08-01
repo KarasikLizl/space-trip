@@ -7,10 +7,12 @@ export interface GameObjectConfig {
     image: string;
 }
 
-export class GameObject extends Phaser.GameObjects.Image {
+export class GameObject extends Phaser.Physics.Arcade.Image {
     speed: number;
     constructor (scene: Phaser.Scene, config: GameObjectConfig) {
         super(scene, config.x, config.y, config.image);
         this.speed = config.speed;
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
     }
 }
