@@ -12,12 +12,14 @@ export interface PlayerConfig extends GameObjectConfig {
 export class Player extends GameObject {
     health: number;
     satiety: number;
+    lastEatTime: number;
 
     constructor (scene: Phaser.Scene, config: PlayerConfig) {
         super(scene, { ...config, image: PLAYER_IMAGE_KEY });
 
-        this.health = config.health;
         this.satiety = 1;
+        this.health = config.health;
+        this.lastEatTime = Date.now();
         this.setDisplaySize(playerSettings.width, playerSettings.height);
         this.setCollideWorldBounds(true);
     }
@@ -35,19 +37,29 @@ export class Player extends GameObject {
         } else if (cursors.down.isDown) {
             this.setVelocityY(this.getSpeed());
         }
+
+        if (this.lastEatTime + playerSettings.hungerTime < Date.now()) {
+            this.lastEatTime = Date.now();
+            this.updateSetiety(playerSettings.hungerQSaturation);
+        }
     }
 
     getSpeed() {
         return this.speed * (1 / this.satiety);
     }
 
-    eat(food: Food ) {
-        this.scale += playerSettings.scaleStep;
-        this.satiety += playerSettings.satietyStep;
-        this.health += food.saturation;
+    eat(food: Food) {
+        this.updateSetiety(food.saturation);
+        this.lastEatTime = Date.now();
 
         food.setX(randomInteger(0, Number(gameSettings.width)));
         food.setY(randomInteger(0, Number(gameSettings.height)));
         food.saturation = getRandomSaturation();
+    }
+
+    updateSetiety(saturation: number) {
+        this.scale += saturation / playerSettings.scaleQ;
+        this.satiety += saturation / playerSettings.satietyQ;
+        this.health += saturation;
     }
 }

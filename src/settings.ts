@@ -13,19 +13,23 @@ export const gameSettings: Phaser.Types.Core.GameConfig = {
 };
 
 export const playerSettings = {
-    scaleStep: .01,
-    satietyStep: .1,
+    scaleQ: 1000,
+    satietyQ: 100,
     width: 75,
     height: 75,
     startX: 300,
     startY: 300,
     startSpeed: 150,
     startHealth: 25,
+    hungerTime: 5000,
+    hungerQSaturation: -10,
 };
+
 export const foodSettings = {
     minSaturation: 10,
     maxSaturation: 25,
     width: 50,
     height: 50,
 };
+
 export const enemySettings = {};
