@@ -1,13 +1,17 @@
 import Phaser from 'phaser';
 import { FOOD_IMAGE_KEY } from '../constants';
-import { GameObject } from "./GameObject";
+import { GameObject, GameObjectConfig } from "./GameObject";
+
+export interface FoodConfig extends GameObjectConfig {
+    saturation: number;
+}
 
 export class Food extends GameObject {
     saturation: number;
-    constructor (scene: Phaser.Scene, x: number, y: number, saturation: number) {
-        super(scene, x, y, saturation, FOOD_IMAGE_KEY);
+    constructor (scene: Phaser.Scene, config: FoodConfig) {
+        super(scene, { ...config, image: FOOD_IMAGE_KEY });
 
-        this.saturation = saturation;
+        this.saturation = config.saturation;
         this.setDisplaySize(50, 50);
     }
 }

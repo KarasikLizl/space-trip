@@ -1,15 +1,17 @@
 import Phaser from "phaser";
 import { PLAYER_IMAGE_KEY } from '../constants';
-import { GameObject } from "./GameObject";
+import { GameObject, GameObjectConfig } from "./GameObject";
 
-const defaultSpeed = 10;
+export interface PlayerConfig extends GameObjectConfig {
+    health: number;
+}
 
 export class Player extends GameObject {
     health: number;
-    constructor (scene: Phaser.Scene, x: number, y: number, health: number) {
-        super(scene, x, y, defaultSpeed, PLAYER_IMAGE_KEY);
+    constructor (scene: Phaser.Scene, config: PlayerConfig) {
+        super(scene, { ...config, image: PLAYER_IMAGE_KEY });
 
-        this.health = health;
+        this.health = config.health;
         this.setDisplaySize(75, 75);
     }
 
