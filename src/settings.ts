@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
 
+const body = document.querySelector('body');
+const bodyRect = body?.getBoundingClientRect();
 export const gameSettings: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: bodyRect?.width || 0,
+    height: bodyRect?.height || 0,
     physics: {
         default: 'arcade',
         arcade: {

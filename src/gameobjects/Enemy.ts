@@ -25,6 +25,7 @@ export class Enemy extends GameObject {
         this.damage = config.damage;
         this.setDisplaySize(125, 125);
         this.velocityVector = 0;
+        this.setScale(1.2);
     }
 
     update() {

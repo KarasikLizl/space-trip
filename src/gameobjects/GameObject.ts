@@ -7,7 +7,7 @@ export interface GameObjectConfig {
     image: string;
 }
 
-export class GameObject extends Phaser.Physics.Arcade.Image {
+export class GameObject extends Phaser.Physics.Arcade.Sprite {
     speed: number;
     constructor (scene: Phaser.Scene, config: GameObjectConfig) {
         super(scene, config.x, config.y, config.image);
