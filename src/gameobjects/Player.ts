@@ -1,7 +1,9 @@
 import Phaser from "phaser";
 import { PLAYER_IMAGE_KEY } from '../constants';
-import { Food } from "./Food";
+import { Food, getRandomSaturation } from "./Food";
 import { GameObject, GameObjectConfig } from "./GameObject";
+import { randomInteger } from '../utils';
+import { gameSettings, playerSettings } from '../settings';
 
 export interface PlayerConfig extends GameObjectConfig {
     health: number;
@@ -9,11 +11,14 @@ export interface PlayerConfig extends GameObjectConfig {
 
 export class Player extends GameObject {
     health: number;
+    satiety: number;
+
     constructor (scene: Phaser.Scene, config: PlayerConfig) {
         super(scene, { ...config, image: PLAYER_IMAGE_KEY });
 
         this.health = config.health;
-        this.setDisplaySize(75, 75);
+        this.satiety = 1;
+        this.setDisplaySize(playerSettings.width, playerSettings.height);
         this.setCollideWorldBounds(true);
     }
 
@@ -21,19 +26,28 @@ export class Player extends GameObject {
         this.setVelocity(0);
 
         if (cursors.left.isDown) {
-            this.setVelocityX(-this.speed);
+            this.setVelocityX(-this.getSpeed());
         } else if (cursors.right.isDown) {
-            this.setVelocityX(this.speed);
-        } 
+            this.setVelocityX(this.getSpeed());
+        }
         if (cursors.up.isDown) {
-            this.setVelocityY(-this.speed);
+            this.setVelocityY(-this.getSpeed());
         } else if (cursors.down.isDown) {
-            this.setVelocityY(this.speed);
+            this.setVelocityY(this.getSpeed());
         }
     }
 
-    eat(player: Player, food: Food ) {
-        this.health = food.saturation;
-        
+    getSpeed() {
+        return this.speed * (1 / this.satiety);
+    }
+
+    eat(food: Food ) {
+        this.scale += playerSettings.scaleStep;
+        this.satiety += playerSettings.satietyStep;
+        this.health += food.saturation;
+
+        food.setX(randomInteger(0, Number(gameSettings.width)));
+        food.setY(randomInteger(0, Number(gameSettings.height)));
+        food.saturation = getRandomSaturation();
     }
 }
