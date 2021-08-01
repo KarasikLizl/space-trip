@@ -32,4 +32,8 @@ export const foodSettings = {
     height: 50,
 };
 
-export const enemySettings = {};
+export const enemySettings = {
+    startPositionOffset: 20,
+    edgeOffset: 100,
+    speed: 200,
+};

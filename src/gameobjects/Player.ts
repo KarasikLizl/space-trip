@@ -4,6 +4,7 @@ import { Food, getRandomSaturation } from "./Food";
 import { GameObject, GameObjectConfig } from "./GameObject";
 import { randomInteger } from '../utils';
 import { gameSettings, playerSettings } from '../settings';
+import { Enemy } from './Enemy';
 
 export interface PlayerConfig extends GameObjectConfig {
     health: number;
@@ -55,6 +56,11 @@ export class Player extends GameObject {
         food.setX(randomInteger(0, Number(gameSettings.width)));
         food.setY(randomInteger(0, Number(gameSettings.height)));
         food.saturation = getRandomSaturation();
+    }
+
+    getDamage(enemy: Enemy) {
+        this.health -= enemy.damage;
+        enemy.reset();
     }
 
     updateSetiety(saturation: number) {
