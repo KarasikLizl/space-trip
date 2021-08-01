@@ -1,9 +1,8 @@
 import Phaser from "phaser";
 import { PLAYER_IMAGE_KEY } from '../constants';
-import { Food, getRandomSaturation } from "./Food";
+import { Food } from "./Food";
 import { GameObject, GameObjectConfig } from "./GameObject";
-import { randomInteger } from '../utils';
-import { gameSettings, playerSettings } from '../settings';
+import { playerSettings } from '../settings';
 import { Enemy } from './Enemy';
 
 export interface PlayerConfig extends GameObjectConfig {
@@ -53,13 +52,11 @@ export class Player extends GameObject {
         this.updateSetiety(food.saturation);
         this.lastEatTime = Date.now();
 
-        food.setX(randomInteger(0, Number(gameSettings.width)));
-        food.setY(randomInteger(0, Number(gameSettings.height)));
-        food.saturation = getRandomSaturation();
+        food.reset();
     }
 
     getDamage(enemy: Enemy) {
-        this.health -= enemy.damage;
+        this.updateSetiety(-enemy.damage);
         enemy.reset();
     }
 

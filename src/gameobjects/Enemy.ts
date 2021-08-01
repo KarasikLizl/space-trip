@@ -2,19 +2,29 @@ import Phaser from 'phaser';
 import { ENEMY_IMAGE_KEY } from '../constants';
 import { enemySettings, gameSettings } from '../settings';
 import { randomInteger } from '../utils';
+import { Food } from './Food';
 import { GameObject, GameObjectConfig } from "./GameObject";
 
 export interface EnemyConfig extends GameObjectConfig {
     damage: number;
 }
 
+enum VelocityVector {
+    TOP_TO_BOTTOM,
+    LEFT_TO_RIGHT,
+    BOTTOM_TO_TOP,
+    RIGHT_TO_LEFT,
+}
+
 export class Enemy extends GameObject {
     damage: number;
+    velocityVector: VelocityVector;
     constructor (scene: Phaser.Scene, config: EnemyConfig) {
         super(scene, { ...config, image: ENEMY_IMAGE_KEY });
 
         this.damage = config.damage;
         this.setDisplaySize(125, 125);
+        this.velocityVector = 0;
     }
 
     update() {
@@ -32,9 +42,31 @@ export class Enemy extends GameObject {
         }
     }
 
+    boost(food: Food) {
+        switch(this.velocityVector) {
+            case VelocityVector.TOP_TO_BOTTOM: {
+                this.setVelocityY(enemySettings.boostSpeed);
+                break;
+            }
+            case VelocityVector.RIGHT_TO_LEFT: {
+                this.setVelocityX(-enemySettings.boostSpeed);
+                break;
+            }
+            case VelocityVector.BOTTOM_TO_TOP: {
+                this.setVelocityY(-enemySettings.boostSpeed);
+                break;
+            }
+            case VelocityVector.LEFT_TO_RIGHT: {
+                this.setVelocityX(enemySettings.boostSpeed);
+                break;
+            }
+        }
+
+        food.reset();
+    }
+
     reset() {
         const coords = getStartEnemyCoords();
-        console.log(coords);
         this.setX(coords.x);
         this.setY(coords.y);
         setEnemyVelocity(this);
@@ -81,15 +113,21 @@ export const setEnemyVelocity = (enemy: Enemy) => {
 
     if(isHorizontalVector) {
         if (enemy.x < 0) {
+            enemy.velocityVector = VelocityVector.LEFT_TO_RIGHT;
             enemy.setVelocityX(enemySettings.speed);
         } else {
+            enemy.velocityVector = VelocityVector.RIGHT_TO_LEFT;
             enemy.setVelocityX(-enemySettings.speed);
         }
     } else {
         if (enemy.y < 0) {
+            enemy.velocityVector = VelocityVector.TOP_TO_BOTTOM;
             enemy.setVelocityY(enemySettings.speed);
         } else {
+            enemy.velocityVector = VelocityVector.BOTTOM_TO_TOP;
             enemy.setVelocityY(-enemySettings.speed);
         }
     };
 }
+
+export const getRandomDamage = () => randomInteger(enemySettings.minDamage, enemySettings.maxDamage);

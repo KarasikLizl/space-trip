@@ -52,6 +52,7 @@ function create(this: Phaser.Scene) {
 
     this.physics.add.overlap(player, food, (_, obj2) => player.eat(obj2 as Food));
     this.physics.add.overlap(player, enemy, (_, obj2) => player.getDamage(obj2 as Enemy));
+    this.physics.add.overlap(enemy, food, (_, obj2) => enemy.boost(obj2 as Food));
 }
 
 function update() {

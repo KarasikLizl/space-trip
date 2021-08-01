@@ -36,4 +36,7 @@ export const enemySettings = {
     startPositionOffset: 20,
     edgeOffset: 100,
     speed: 200,
+    minDamage: 10,
+    maxDamage: 25,
+    boostSpeed: 400,
 };

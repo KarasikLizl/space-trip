@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { FOOD_IMAGE_KEY } from '../constants';
-import { foodSettings } from '../settings';
+import { foodSettings, gameSettings } from '../settings';
 import { randomInteger } from '../utils';
 import { GameObject, GameObjectConfig } from "./GameObject";
 
@@ -15,6 +15,12 @@ export class Food extends GameObject {
 
         this.saturation = config.saturation;
         this.setDisplaySize(foodSettings.width, foodSettings.height);
+    }
+
+    reset() {
+        this.setX(randomInteger(0, Number(gameSettings.width)));
+        this.setY(randomInteger(0, Number(gameSettings.height)));
+        this.saturation = getRandomSaturation();
     }
 }
 
