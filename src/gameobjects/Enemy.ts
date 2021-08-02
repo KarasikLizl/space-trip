@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GLOBAL_KEYS } from '../constants';
+import { ANIMATION_KEYS, ASSETS_MAP_KEY } from '../constants';
 import { enemySettings, gameSettings } from '../settings';
 import { randomInteger } from '../utils';
 import { Food } from './Food';
@@ -23,14 +23,15 @@ export class Enemy extends GameObject {
             ...config,
             x: -500,
             y: -500,
-            image: GLOBAL_KEYS.ENEMY_IMAGE_KEY,
         });
 
         this.velocityVector = 0;
         this.damage = this.getRandomDamage();
         this.setDisplaySize(enemySettings.width, enemySettings.height);
+        this.createAnimations();
 
         this.reset();
+        this.play(ANIMATION_KEYS.IDLE);
     }
 
     getDamage() {
@@ -142,5 +143,42 @@ export class Enemy extends GameObject {
 
     private getRandomDamage() {
         return randomInteger(enemySettings.minDamage, enemySettings.maxDamage);
+    }
+
+    private createAnimations() {
+        this.anims.create({
+            key: ANIMATION_KEYS.IDLE,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
     }
 }

@@ -1,27 +1,29 @@
 import {
-    appleImage,
-    spaceImage,
-    playerMoveRightImages,
-    playerMoveLeftImages,
-    enemyMoveLeftImages,
-    enemyMoveRightImages,
+    player,
+    enemy,
+    background,
+    food,
 } from './assets/index';
 
 export const ASSETS_MAP = {
-    playerMoveRightImgs: playerMoveRightImages,
-    playerMoveLeftImgs: playerMoveLeftImages,
-    enemyMoveRightImgs: enemyMoveRightImages,
-    enemyMoveLeftImgs: enemyMoveLeftImages,
-    foodImg: appleImage,
-    bgImg: spaceImage,
+    player,
+    enemy,
+    background,
+    food,
 }
 
+type ASSETS_KEYS = keyof typeof ASSETS_MAP;
+
+export const ASSETS_MAP_KEY: Record<ASSETS_KEYS, string> = Object.keys(ASSETS_MAP).reduce((result: Record<ASSETS_KEYS, string>, key: string) => {
+    return { ...result, [key]: key };
+}, {} as Record<ASSETS_KEYS, string>);
+
 export enum ANIMATION_KEYS {
-    PLAYER_MOVE_TOP_RIGHT = 'player_move_top_right',
-    PLAYER_MOVE_TOP_LEFT = 'player_move_top_left',
-    PLAYER_MOVE_BOTTOM_RIGHT = 'player_move_bottom_right',
-    PLAYER_MOVE_BOTTOM_LEFT = 'player_move_bottom_left',
-    PLAYER_IDLE = 'player_idle',
+    IDLE = 'player_idle',
+    MOVE_TOP_RIGHT = 'player_move_top_right',
+    MOVE_TOP_LEFT = 'player_move_top_left',
+    MOVE_BOTTOM_RIGHT = 'player_move_bottom_right',
+    MOVE_BOTTOM_LEFT = 'player_move_bottom_left',
 }
 
 export enum SCENE_KEYS {
@@ -31,9 +33,3 @@ export enum SCENE_KEYS {
     GAME = 'game',
     END = 'end',
 };
-
-export enum GLOBAL_KEYS {
-    FOOD_IMAGE_KEY = 'food_img',
-    ENEMY_IMAGE_KEY = 'enemy_img',
-    BG_IMAGE_KEY = 'bg_img',
-}

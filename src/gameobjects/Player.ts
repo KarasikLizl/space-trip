@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { ANIMATION_KEYS } from '../constants';
+import { ANIMATION_KEYS, ASSETS_MAP_KEY } from '../constants';
 import { Food } from "./Food";
 import { GameObject, GameObjectConfig } from "./GameObject";
 import { playerSettings } from '../settings';
@@ -29,7 +29,7 @@ export class Player extends GameObject {
     private isMoving: boolean;
 
     constructor (scene: Phaser.Scene, config: PlayerConfig) {
-        super(scene, { ...config, image: ANIMATION_KEYS.PLAYER_IDLE });
+        super(scene, { ...config });
 
         this.satiety = 1;
         this.health = config.health;
@@ -37,6 +37,8 @@ export class Player extends GameObject {
         this.isMoving = false;
         this.setDisplaySize(playerSettings.width, playerSettings.height);
         this.setCollideWorldBounds(true);
+        this.createAnimations();
+        this.play(ANIMATION_KEYS.IDLE);
     }
 
     update(cursors: Phaser.Types.Input.Keyboard.CursorKeys, time: number) {
@@ -100,23 +102,23 @@ export class Player extends GameObject {
                 case 1000:
                 case 1100:
                 case 100:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_TOP_RIGHT);
+                    this.play(ANIMATION_KEYS.MOVE_TOP_RIGHT);
                     break;
                 case 110:
                 case 10:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_BOTTOM_RIGHT);
+                    this.play(ANIMATION_KEYS.MOVE_BOTTOM_RIGHT);
                     break;
                 case 1001:
                 case 1:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_TOP_LEFT);
+                    this.play(ANIMATION_KEYS.MOVE_TOP_LEFT);
                     break;
                 case 11:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_BOTTOM_LEFT);
+                    this.play(ANIMATION_KEYS.MOVE_BOTTOM_LEFT);
                     break;
                 default: break;
             }
         } else {
-            this.play(ANIMATION_KEYS.PLAYER_IDLE);
+            this.play(ANIMATION_KEYS.IDLE);
         }
         this.isMoving = move;
     }
@@ -171,5 +173,42 @@ export class Player extends GameObject {
         }
 
         return directionMove;
+    }
+
+    private createAnimations() {
+        this.anims.create({
+            key: ANIMATION_KEYS.IDLE,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
     }
 }

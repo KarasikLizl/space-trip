@@ -1,4 +1,4 @@
-import { ASSETS_MAP, GLOBAL_KEYS, SCENE_KEYS } from '../constants';
+import { ASSETS_MAP_KEY, SCENE_KEYS } from '../constants';
 import { Enemy } from '../gameobjects/Enemy';
 import { Food, getRandomSaturation } from '../gameobjects/Food';
 import { Player } from '../gameobjects/Player';
@@ -18,15 +18,12 @@ export class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image(GLOBAL_KEYS.ENEMY_IMAGE_KEY, ASSETS_MAP.enemyMoveRightImgs[0]);
-        this.load.image(GLOBAL_KEYS.FOOD_IMAGE_KEY, ASSETS_MAP.foodImg);
-
         logger('preload', SCENE_KEYS.GAME, 'scene');
     }
 
     create() {
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.add.image(0, 0, GLOBAL_KEYS.BG_IMAGE_KEY).setScale(2);
+        this.add.image(0, 0, ASSETS_MAP_KEY.background).setScale(2);
 
         this.player = new Player(this, {
             x: playerSettings.startX,

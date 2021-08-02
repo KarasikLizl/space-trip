@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ANIMATION_KEYS, SCENE_KEYS } from '../constants';
+import { SCENE_KEYS } from '../constants';
 import { gameSettings, uiSettings } from '../settings';
 import { logger } from '../utils';
 
@@ -19,9 +19,6 @@ export class MenuScene extends Phaser.Scene {
             fontFamily: uiSettings.font,
             color: uiSettings.menu.description.fontColor,
         }).setOrigin(0.5, 0).setFontSize(uiSettings.menu.description.fontSize)
-
-        this.add.image(gameWidth / 2, 200, ANIMATION_KEYS.PLAYER_IDLE)
-            .setScale(.5);
 
         this.input.once('pointerdown', () => {
             this.scene.start(SCENE_KEYS.GAME);
