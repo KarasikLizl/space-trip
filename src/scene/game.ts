@@ -4,12 +4,14 @@ import { Food, getRandomSaturation } from '../gameobjects/Food';
 import { Player } from '../gameobjects/Player';
 import { playerSettings } from '../settings';
 import { logger } from '../utils';
+import { ScoreBoard } from '../gameobjects/ScoreBoard';
 
 export class GameScene extends Phaser.Scene {
     cursors: Phaser.Types.Input.Keyboard.CursorKeys | null = null;
     player: Player | null = null;
     food: Food | null = null;
     enemy: Enemy | null = null;
+    scoreBoard: ScoreBoard | null = null;
 
     constructor() {
         super(SCENE_KEYS.GAME);
@@ -39,6 +41,7 @@ export class GameScene extends Phaser.Scene {
         this.enemy = new Enemy(this, {
             speed: 0,
         });
+        this.scoreBoard = new ScoreBoard(this);
 
         this.physics.add.overlap(this.player, this.food, (_, obj2) => this.player?.eat(obj2 as Food));
         this.physics.add.overlap(this.player, this.enemy, (_, obj2) => this.player?.setDamage(obj2 as Enemy));
@@ -51,9 +54,10 @@ export class GameScene extends Phaser.Scene {
             this.player?.update(this.cursors);
         }
         this.enemy?.update();
+        this.scoreBoard?.update();
     }
 
-    checkPlayerStatus() {
+    private checkPlayerStatus() {
         if (!this.player) {
             return;
         }

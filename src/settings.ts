@@ -46,6 +46,10 @@ export const enemySettings = {
     boostSpeed: 400,
 };
 
+export const scoreBoardSettings = {
+    offset: 10,
+}
+
 export const uiSettings = {
     font: 'Roboto',
     menu: {
