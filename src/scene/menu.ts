@@ -10,9 +10,10 @@ export class MenuScene extends Phaser.Scene {
 
     create() {
         const gameWidth = (Number(gameSettings.width) || 0);
-        this.add.text(gameWidth / 2, 350, uiSettings.menu.title.text, {
+        this.add.text(gameWidth / 2, 230, uiSettings.menu.title.text, {
             fontFamily: uiSettings.font,
             color: uiSettings.menu.title.fontColor,
+            align: 'center',
         }).setOrigin(0.5, 0).setFontSize(uiSettings.menu.title.fontSize);
 
         this.add.text(gameWidth / 2, 470, uiSettings.menu.description.text, {

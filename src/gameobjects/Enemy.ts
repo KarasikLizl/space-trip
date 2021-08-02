@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { ANIMATION_KEYS, ASSETS_MAP_KEY } from '../constants';
+import { ASSETS_MAP_KEY } from '../assets';
+import { ANIMATION_KEYS } from '../constants';
 import { enemySettings, gameSettings } from '../settings';
 import { randomInteger } from '../utils';
 import { Food } from './Food';
@@ -15,8 +16,8 @@ enum VelocityVector {
 }
 
 export class Enemy extends GameObject {
-    private damage: number;
-    private velocityVector: VelocityVector;
+    private damage: number = 0;
+    private velocityVector: VelocityVector = 0;
 
     constructor (scene: Phaser.Scene, config: EnemyConfig) {
         super(scene, {
@@ -25,12 +26,9 @@ export class Enemy extends GameObject {
             y: -500,
         });
 
-        this.velocityVector = 0;
-        this.damage = this.getRandomDamage();
         this.setDisplaySize(enemySettings.width, enemySettings.height);
-        this.createAnimations();
-
         this.reset();
+        this.createAnimations();
         this.play(ANIMATION_KEYS.IDLE);
     }
 

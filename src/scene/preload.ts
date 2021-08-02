@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { ASSETS_MAP, ASSETS_MAP_KEY, SCENE_KEYS } from '../constants';
+import { ASSETS_MAP, ASSETS_MAP_KEY } from '../assets';
+import { SCENE_KEYS } from '../constants';
 import { uiSettings } from '../settings';
 import { logger } from '../utils';
 
@@ -9,10 +10,9 @@ export class PreloadScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.spritesheet(ASSETS_MAP_KEY.player, ASSETS_MAP.player, { frameWidth: 16, frameHeight: 16 });
-        this.load.spritesheet(ASSETS_MAP_KEY.enemy, ASSETS_MAP.enemy, { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet(ASSETS_MAP_KEY.player, ASSETS_MAP.player, { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet(ASSETS_MAP_KEY.enemy, ASSETS_MAP.enemy, { frameWidth: 24, frameHeight: 24 });
         this.load.spritesheet(ASSETS_MAP_KEY.food, ASSETS_MAP.food, { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet(ASSETS_MAP_KEY.player, ASSETS_MAP.food, { frameWidth: 32, frameHeight: 32 });
         this.load.image(ASSETS_MAP_KEY.background, ASSETS_MAP.background);
 
         logger('preload', SCENE_KEYS.PRELOAD, 'scene');

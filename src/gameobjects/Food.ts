@@ -1,28 +1,25 @@
 import Phaser from 'phaser';
-import { ANIMATION_KEYS, ASSETS_MAP_KEY } from '../constants';
+import { ASSETS_MAP_KEY } from '../assets';
 import { foodSettings, gameSettings } from '../settings';
 import { randomInteger } from '../utils';
 import { GameObject, GameObjectConfig } from "./GameObject";
 
-export interface FoodConfig extends Pick<GameObjectConfig, 'speed'> {
-    saturation: number;
-}
+export interface FoodConfig extends Pick<GameObjectConfig, 'speed'> {}
+
+const SPRITESHEET_FRAMES_COUNT = 4;
 
 export class Food extends GameObject {
-    private saturation: number;
+    private saturation: number = 0;
 
     constructor (scene: Phaser.Scene, config: FoodConfig) {
         super(scene, {
             ...config,
-            x: randomInteger(0, Number(gameSettings.width)),
-            y: randomInteger(0, Number(gameSettings.height)),
+            x: 0,
+            y: 0,
         });
 
-        this.saturation = config.saturation;
         this.setDisplaySize(foodSettings.width, foodSettings.height);
-
-        this.createAnimations();
-        this.play(ANIMATION_KEYS.IDLE);
+        this.reset();
     }
 
     getSaturation() {
@@ -30,19 +27,13 @@ export class Food extends GameObject {
     }
 
     reset() {
+        this.saturation = this.getRandomSaturation();
         this.setX(randomInteger(0, Number(gameSettings.width)));
         this.setY(randomInteger(0, Number(gameSettings.height)));
-        this.saturation = getRandomSaturation();
+        this.setTexture(ASSETS_MAP_KEY.food, randomInteger(0, SPRITESHEET_FRAMES_COUNT));
     }
 
-    private createAnimations() {
-        this.anims.create({
-            key: ANIMATION_KEYS.IDLE,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.food, { frames: [ 0 ] }),
-            frameRate: 1,
-            repeat: -1,
-        });
+    private getRandomSaturation() {
+        return randomInteger(foodSettings.minSaturation, foodSettings.maxSaturation);
     }
 }
-
-export const getRandomSaturation = () => randomInteger(foodSettings.minSaturation, foodSettings.maxSaturation);

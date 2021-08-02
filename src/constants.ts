@@ -1,29 +1,13 @@
-import {
-    player,
-    enemy,
-    background,
-    food,
-} from './assets/index';
-
-export const ASSETS_MAP = {
-    player,
-    enemy,
-    background,
-    food,
-}
-
-type ASSETS_KEYS = keyof typeof ASSETS_MAP;
-
-export const ASSETS_MAP_KEY: Record<ASSETS_KEYS, string> = Object.keys(ASSETS_MAP).reduce((result: Record<ASSETS_KEYS, string>, key: string) => {
-    return { ...result, [key]: key };
-}, {} as Record<ASSETS_KEYS, string>);
-
 export enum ANIMATION_KEYS {
-    IDLE = 'player_idle',
-    MOVE_TOP_RIGHT = 'player_move_top_right',
-    MOVE_TOP_LEFT = 'player_move_top_left',
-    MOVE_BOTTOM_RIGHT = 'player_move_bottom_right',
-    MOVE_BOTTOM_LEFT = 'player_move_bottom_left',
+    IDLE = 'idle',
+    MOVE_TOP_RIGHT = 'move_top_right',
+    MOVE_TOP_LEFT = 'move_top_left',
+    MOVE_BOTTOM_RIGHT = 'move_bottom_right',
+    MOVE_BOTTOM_LEFT = 'move_bottom_left',
+    MOVE_RIGHT = 'move_right',
+    MOVE_LEFT = 'move_left',
+    MOVE_TOP = 'move_top',
+    MOVE_BOTTOM = 'move_bottom',
 }
 
 export enum SCENE_KEYS {

@@ -18,8 +18,8 @@ export const gameSettings: Phaser.Types.Core.GameConfig = {
 export const playerSettings = {
     scaleQ: 1000,
     satietyQ: 100,
-    width: 75,
-    height: 75,
+    width: 32,
+    height: 32,
     startX: 300,
     startY: 300,
     startSpeed: 150,
@@ -31,13 +31,13 @@ export const playerSettings = {
 export const foodSettings = {
     minSaturation: 10,
     maxSaturation: 25,
-    width: 50,
-    height: 50,
+    width: 32,
+    height: 32,
 };
 
 export const enemySettings = {
-    width: 250,
-    height: 250,
+    width: 48,
+    height: 48,
     startPositionOffset: 20,
     edgeOffset: 100,
     speed: 200,
@@ -56,24 +56,24 @@ export const uiSettings = {
         title: {
             fontSize: 100,
             fontColor: '#fff',
-            text: 'Gangster Hamster Game',
+            text: 'Добро пожаловать в \n хомячий бедтрип',
         },
         description: {
             fontSize: 25,
             fontColor: '#fff',
-            text: '( click everywhere )',
+            text: '( нажмите в любое место )',
         }
     },
     end: {
         title: {
             fontSize: 100,
             fontColor: '#fff',
-            text: 'Game Over :(',
+            text: 'Вас отпустило',
         },
         description: {
             fontSize: 25,
             fontColor: '#fff',
-            text: '( click everywhere to restart )',
+            text: '( нажмите в любое место, что бы начать заново )',
         }
     }
 }

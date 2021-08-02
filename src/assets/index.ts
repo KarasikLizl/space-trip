@@ -1,11 +1,17 @@
-import player from '../assets/sprites/player.png';
-import enemy from '../assets/sprites/enemy.png';
-import background from '../assets/background.jpg';
-import food from '../assets/sprites/food.png';
+import player from './sprites/player.png';
+import enemy from './sprites/enemy.png';
+import background from './background.jpg';
+import food from './sprites/food.png';
 
-export  {
+export const ASSETS_MAP = {
     player,
     enemy,
     background,
     food,
 }
+
+type ASSETS_KEYS = keyof typeof ASSETS_MAP;
+
+export const ASSETS_MAP_KEY: Record<ASSETS_KEYS, string> = Object.keys(ASSETS_MAP).reduce((result: Record<ASSETS_KEYS, string>, key: string) => {
+    return { ...result, [key]: key };
+}, {} as Record<ASSETS_KEYS, string>);
