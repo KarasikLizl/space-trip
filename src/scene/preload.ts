@@ -11,7 +11,7 @@ export class PreloadScene extends Phaser.Scene {
 
     preload() {
         this.load.spritesheet(ASSETS_MAP_KEY.player, ASSETS_MAP.player, { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet(ASSETS_MAP_KEY.enemy, ASSETS_MAP.enemy, { frameWidth: 24, frameHeight: 24 });
+        this.load.spritesheet(ASSETS_MAP_KEY.enemy, ASSETS_MAP.enemy, { frameWidth: 72, frameHeight: 72 });
         this.load.spritesheet(ASSETS_MAP_KEY.food, ASSETS_MAP.food, { frameWidth: 32, frameHeight: 32 });
         this.load.image(ASSETS_MAP_KEY.background, ASSETS_MAP.background);
 

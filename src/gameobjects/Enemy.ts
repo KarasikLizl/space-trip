@@ -146,36 +146,8 @@ export class Enemy extends GameObject {
     private createAnimations() {
         this.anims.create({
             key: ANIMATION_KEYS.IDLE,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
-            frameRate: 1,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: ANIMATION_KEYS.MOVE_TOP_LEFT,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
-            frameRate: 1,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: ANIMATION_KEYS.MOVE_TOP_RIGHT,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
-            frameRate: 1,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: ANIMATION_KEYS.MOVE_BOTTOM_RIGHT,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
-            frameRate: 1,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: ANIMATION_KEYS.MOVE_BOTTOM_LEFT,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
-            frameRate: 1,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { start: 0, end: 18 }),
+            frameRate: 19,
             repeat: -1,
         });
     }
