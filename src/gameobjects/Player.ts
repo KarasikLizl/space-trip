@@ -4,6 +4,7 @@ import { Food } from "./Food";
 import { GameObject, GameObjectConfig } from "./GameObject";
 import { playerSettings } from '../settings';
 import { Enemy } from './Enemy';
+import { ASSETS_MAP_KEY } from '../assets';
 
 export interface PlayerConfig extends GameObjectConfig {
     health: number;
@@ -29,14 +30,18 @@ export class Player extends GameObject {
     private isMoving: boolean;
 
     constructor (scene: Phaser.Scene, config: PlayerConfig) {
-        super(scene, { ...config, image: ANIMATION_KEYS.PLAYER_IDLE });
+        super(scene, { ...config });
 
         this.satiety = 1;
         this.health = config.health;
         this.lastEatTime = this.scene.time.now;;
         this.isMoving = false;
-        this.setDisplaySize(playerSettings.width, playerSettings.height);
+
         this.setCollideWorldBounds(true);
+        this.setDisplaySize(playerSettings.width, playerSettings.height);
+        this.setSize(playerSettings.width, playerSettings.height);
+        this.createAnimations();
+        this.play(ANIMATION_KEYS.IDLE);
     }
 
     update(cursors: Phaser.Types.Input.Keyboard.CursorKeys, time: number) {
@@ -98,25 +103,33 @@ export class Player extends GameObject {
         if (move) {
             switch(direction) {
                 case 1000:
+                    this.play(ANIMATION_KEYS.MOVE_TOP);
+                    break;
                 case 1100:
+                    this.play(ANIMATION_KEYS.MOVE_TOP_RIGHT);
+                    break;
                 case 100:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_TOP_RIGHT);
+                    this.play(ANIMATION_KEYS.MOVE_RIGHT);
                     break;
                 case 110:
+                    this.play(ANIMATION_KEYS.MOVE_BOTTOM_RIGHT);
+                    break;
                 case 10:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_BOTTOM_RIGHT);
+                    this.play(ANIMATION_KEYS.MOVE_BOTTOM);
                     break;
                 case 1001:
+                    this.play(ANIMATION_KEYS.MOVE_TOP_LEFT);
+                    break;
                 case 1:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_TOP_LEFT);
+                    this.play(ANIMATION_KEYS.MOVE_LEFT);
                     break;
                 case 11:
-                    this.play(ANIMATION_KEYS.PLAYER_MOVE_BOTTOM_LEFT);
+                    this.play(ANIMATION_KEYS.MOVE_BOTTOM_LEFT);
                     break;
                 default: break;
             }
         } else {
-            this.play(ANIMATION_KEYS.PLAYER_IDLE);
+            this.play(ANIMATION_KEYS.IDLE);
         }
         this.isMoving = move;
     }
@@ -171,5 +184,70 @@ export class Player extends GameObject {
         }
 
         return directionMove;
+    }
+
+    private createAnimations() {
+        this.anims.create({
+            key: ANIMATION_KEYS.IDLE,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 25 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 34 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 36 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 11 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 9 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 20 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 58 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 26 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
     }
 }

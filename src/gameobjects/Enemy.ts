@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { GLOBAL_KEYS } from '../constants';
+import { ASSETS_MAP_KEY } from '../assets';
+import { ANIMATION_KEYS } from '../constants';
 import { enemySettings, gameSettings } from '../settings';
 import { randomInteger } from '../utils';
 import { Food } from './Food';
@@ -15,22 +16,20 @@ enum VelocityVector {
 }
 
 export class Enemy extends GameObject {
-    private damage: number;
-    private velocityVector: VelocityVector;
+    private damage: number = 0;
+    private velocityVector: VelocityVector = 0;
 
     constructor (scene: Phaser.Scene, config: EnemyConfig) {
         super(scene, {
             ...config,
             x: -500,
             y: -500,
-            image: GLOBAL_KEYS.ENEMY_IMAGE_KEY,
         });
 
-        this.velocityVector = 0;
-        this.damage = this.getRandomDamage();
         this.setDisplaySize(enemySettings.width, enemySettings.height);
-
         this.reset();
+        this.createAnimations();
+        this.play(ANIMATION_KEYS.IDLE);
     }
 
     getDamage() {
@@ -142,5 +141,42 @@ export class Enemy extends GameObject {
 
     private getRandomDamage() {
         return randomInteger(enemySettings.minDamage, enemySettings.maxDamage);
+    }
+
+    private createAnimations() {
+        this.anims.create({
+            key: ANIMATION_KEYS.IDLE,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_TOP_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_RIGHT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.MOVE_BOTTOM_LEFT,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [ 0 ] }),
+            frameRate: 1,
+            repeat: -1,
+        });
     }
 }

@@ -1,10 +1,11 @@
-import { ASSETS_MAP, GLOBAL_KEYS, SCENE_KEYS } from '../constants';
+import { SCENE_KEYS } from '../constants';
 import { Enemy } from '../gameobjects/Enemy';
-import { Food, getRandomSaturation } from '../gameobjects/Food';
+import { Food } from '../gameobjects/Food';
 import { Player } from '../gameobjects/Player';
 import { playerSettings } from '../settings';
 import { logger } from '../utils';
 import { ScoreBoard } from '../gameobjects/ScoreBoard';
+import { ASSETS_MAP_KEY } from '../assets';
 
 export class GameScene extends Phaser.Scene {
     cursors: Phaser.Types.Input.Keyboard.CursorKeys | null = null;
@@ -18,15 +19,12 @@ export class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image(GLOBAL_KEYS.ENEMY_IMAGE_KEY, ASSETS_MAP.enemyMoveRightImgs[0]);
-        this.load.image(GLOBAL_KEYS.FOOD_IMAGE_KEY, ASSETS_MAP.foodImg);
-
         logger('preload', SCENE_KEYS.GAME, 'scene');
     }
 
     create() {
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.add.image(0, 0, GLOBAL_KEYS.BG_IMAGE_KEY).setScale(2);
+        this.add.image(0, 0, ASSETS_MAP_KEY.background).setScale(2);
 
         this.player = new Player(this, {
             x: playerSettings.startX,
@@ -34,13 +32,8 @@ export class GameScene extends Phaser.Scene {
             health: playerSettings.startHealth,
             speed: playerSettings.startSpeed,
         });
-        this.food = new Food(this, {
-            saturation: getRandomSaturation(),
-            speed: 0,
-        });
-        this.enemy = new Enemy(this, {
-            speed: 0,
-        });
+        this.food = new Food(this, { speed: 0 });
+        this.enemy = new Enemy(this, { speed: 0 });
         this.scoreBoard = new ScoreBoard(this);
 
         this.physics.add.overlap(this.player, this.food, (_, obj2) => this.player?.eat(obj2 as Food));
