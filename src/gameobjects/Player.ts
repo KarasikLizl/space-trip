@@ -9,11 +9,6 @@ export interface PlayerConfig extends GameObjectConfig {
     health: number;
 }
 
-export enum ViewDirection {
-    LEFT,
-    RIGHT,
-}
-
 /**
  * move direction:
  * 0000;
@@ -28,11 +23,10 @@ export enum ViewDirection {
  */
 
 export class Player extends GameObject {
-    health: number;
-    satiety: number;
-    lastEatTime: number;
-    isMoving: boolean;
-    viewDirection: ViewDirection;
+    private health: number;
+    private satiety: number;
+    private lastEatTime: number;
+    private isMoving: boolean;
 
     constructor (scene: Phaser.Scene, config: PlayerConfig) {
         super(scene, { ...config, image: ANIMATION_KEYS.PLAYER_IDLE });
@@ -41,7 +35,6 @@ export class Player extends GameObject {
         this.health = config.health;
         this.lastEatTime = Date.now();
         this.isMoving = false;
-        this.viewDirection = ViewDirection.RIGHT;
         this.setDisplaySize(playerSettings.width, playerSettings.height);
         this.setCollideWorldBounds(true);
     }
@@ -87,25 +80,33 @@ export class Player extends GameObject {
         return this.speed * (1 / this.satiety);
     }
 
+    getHealth() {
+        return this.health || 0;
+    }
+
+    getSatiety() {
+        return this.satiety || 0;
+    }
+
+    setDamage(enemy: Enemy) {
+        this.updateSetiety(-enemy.getDamage());
+        enemy.reset();
+    }
+
     eat(food: Food) {
-        this.updateSetiety(food.saturation);
+        this.updateSetiety(food.getSaturation());
         this.lastEatTime = Date.now();
 
         food.reset();
     }
 
-    getDamage(enemy: Enemy) {
-        this.updateSetiety(-enemy.damage);
-        enemy.reset();
-    }
-
-    updateSetiety(saturation: number) {
+    private updateSetiety(saturation: number) {
         this.scale += saturation / playerSettings.scaleQ;
         this.satiety += saturation / playerSettings.satietyQ;
         this.health += saturation;
     }
 
-    toggleMoveAnimations(move: boolean, direction?: number) {
+    private toggleMoveAnimations(move: boolean, direction?: number) {
         this.stop();
         if (move) {
             switch(direction) {
@@ -133,7 +134,7 @@ export class Player extends GameObject {
         this.isMoving = move;
     }
 
-    updateVelicity(direction: number) {
+    private updateVelicity(direction: number) {
         this.setVelocity(0);
         const speed = this.getSpeed();
         switch(direction) {

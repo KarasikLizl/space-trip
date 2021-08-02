@@ -1,13 +1,11 @@
 import Phaser from 'phaser';
-import { ENEMY_IMAGE_KEY } from '../constants';
+import { GLOBAL_KEYS } from '../constants';
 import { enemySettings, gameSettings } from '../settings';
 import { randomInteger } from '../utils';
 import { Food } from './Food';
 import { GameObject, GameObjectConfig } from "./GameObject";
 
-export interface EnemyConfig extends GameObjectConfig {
-    damage: number;
-}
+export interface EnemyConfig extends Pick<GameObjectConfig, 'speed'> {};
 
 enum VelocityVector {
     TOP_TO_BOTTOM,
@@ -17,15 +15,26 @@ enum VelocityVector {
 }
 
 export class Enemy extends GameObject {
-    damage: number;
-    velocityVector: VelocityVector;
-    constructor (scene: Phaser.Scene, config: EnemyConfig) {
-        super(scene, { ...config, image: ENEMY_IMAGE_KEY });
+    private damage: number;
+    private velocityVector: VelocityVector;
 
-        this.damage = config.damage;
-        this.setDisplaySize(125, 125);
+    constructor (scene: Phaser.Scene, config: EnemyConfig) {
+        super(scene, {
+            ...config,
+            x: -500,
+            y: -500,
+            image: GLOBAL_KEYS.ENEMY_IMAGE_KEY,
+        });
+
         this.velocityVector = 0;
-        this.setScale(1.2);
+        this.damage = this.getRandomDamage();
+        this.setDisplaySize(enemySettings.width, enemySettings.height);
+
+        this.reset();
+    }
+
+    getDamage() {
+        return this.damage;
     }
 
     update() {
@@ -67,68 +76,71 @@ export class Enemy extends GameObject {
     }
 
     reset() {
-        const coords = getStartEnemyCoords();
+        const coords = this.getStartEnemyCoords();
         this.setX(coords.x);
         this.setY(coords.y);
-        setEnemyVelocity(this);
+        this.damage = this.getRandomDamage();
+        this.setEnemyVelocity();
     }
-}
 
-export const getStartEnemyCoords = (): { x: number, y: number } => {
-    const isHorizontal = Math.random() >= .5;
-    const isLeft = Math.random() >= .5;
-    const isTop = Math.random() >= .5;
-    const gameWidth = Number(gameSettings.width);
-    const gameHeight = Number(gameSettings.height);
+    setEnemyVelocity() {
+        const isHorizontalVector = this.x < 0 || this.x > Number(gameSettings.width);
+        this.setVelocity(0);
 
-    if (isHorizontal) {
-        if (isLeft) {
-            return {
-                x: -enemySettings.startPositionOffset,
-                y: randomInteger(0, gameHeight)
-            };
+        if(isHorizontalVector) {
+            if (this.x < 0) {
+                this.velocityVector = VelocityVector.LEFT_TO_RIGHT;
+                this.setVelocityX(enemySettings.speed);
+            } else {
+                this.velocityVector = VelocityVector.RIGHT_TO_LEFT;
+                this.setVelocityX(-enemySettings.speed);
+            }
         } else {
-            return {
-                x: gameWidth + enemySettings.startPositionOffset,
-                y: randomInteger(0, gameHeight)
+            if (this.y < 0) {
+                this.velocityVector = VelocityVector.TOP_TO_BOTTOM;
+                this.setVelocityY(enemySettings.speed);
+            } else {
+                this.velocityVector = VelocityVector.BOTTOM_TO_TOP;
+                this.setVelocityY(-enemySettings.speed);
+            }
+        };
+    }
+
+    private getStartEnemyCoords(): Phaser.Math.Vector2 {
+        const isHorizontal = Math.random() >= .5;
+        const isLeft = Math.random() >= .5;
+        const isTop = Math.random() >= .5;
+        const gameWidth = Number(gameSettings.width);
+        const gameHeight = Number(gameSettings.height);
+
+        if (isHorizontal) {
+            if (isLeft) {
+                return new Phaser.Math.Vector2({
+                    x: -enemySettings.startPositionOffset,
+                    y: randomInteger(0, gameHeight)
+                });
+            } else {
+                return new Phaser.Math.Vector2({
+                    x: gameWidth + enemySettings.startPositionOffset,
+                    y: randomInteger(0, gameHeight)
+                });
+            }
+        } else {
+            if (isTop) {
+                return new Phaser.Math.Vector2({
+                    x: randomInteger(0, gameWidth),
+                    y: -enemySettings.startPositionOffset
+                });
+            } else {
+                return new Phaser.Math.Vector2({
+                    x: randomInteger(0, gameWidth),
+                    y: gameHeight + enemySettings.startPositionOffset
+                });
             }
         }
-    } else {
-        if (isTop) {
-            return {
-                x: randomInteger(0, gameWidth),
-                y: -enemySettings.startPositionOffset
-            };
-        } else {
-            return {
-                x: randomInteger(0, gameWidth),
-                y: gameHeight + enemySettings.startPositionOffset
-            };
-        }
+    }
+
+    private getRandomDamage() {
+        return randomInteger(enemySettings.minDamage, enemySettings.maxDamage);
     }
 }
-
-export const setEnemyVelocity = (enemy: Enemy) => {
-    const isHorizontalVector = enemy.x < 0 || enemy.x > Number(gameSettings.width);
-    enemy.setVelocity(0);
-
-    if(isHorizontalVector) {
-        if (enemy.x < 0) {
-            enemy.velocityVector = VelocityVector.LEFT_TO_RIGHT;
-            enemy.setVelocityX(enemySettings.speed);
-        } else {
-            enemy.velocityVector = VelocityVector.RIGHT_TO_LEFT;
-            enemy.setVelocityX(-enemySettings.speed);
-        }
-    } else {
-        if (enemy.y < 0) {
-            enemy.velocityVector = VelocityVector.TOP_TO_BOTTOM;
-            enemy.setVelocityY(enemySettings.speed);
-        } else {
-            enemy.velocityVector = VelocityVector.BOTTOM_TO_TOP;
-            enemy.setVelocityY(-enemySettings.speed);
-        }
-    };
-}
-
-export const getRandomDamage = () => randomInteger(enemySettings.minDamage, enemySettings.maxDamage);

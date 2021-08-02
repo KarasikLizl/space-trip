@@ -9,7 +9,8 @@ export const gameSettings: Phaser.Types.Core.GameConfig = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 }
+            debug: true,
+            gravity: { y: 0 },
         }
     },
 };
@@ -35,6 +36,8 @@ export const foodSettings = {
 };
 
 export const enemySettings = {
+    width: 250,
+    height: 250,
     startPositionOffset: 20,
     edgeOffset: 100,
     speed: 200,
@@ -42,3 +45,31 @@ export const enemySettings = {
     maxDamage: 25,
     boostSpeed: 400,
 };
+
+export const uiSettings = {
+    font: 'Roboto',
+    menu: {
+        title: {
+            fontSize: 100,
+            fontColor: '#fff',
+            text: 'Gangster Hamster Game',
+        },
+        description: {
+            fontSize: 25,
+            fontColor: '#fff',
+            text: '( click everywhere )',
+        }
+    },
+    end: {
+        title: {
+            fontSize: 100,
+            fontColor: '#fff',
+            text: 'Game Over :(',
+        },
+        description: {
+            fontSize: 25,
+            fontColor: '#fff',
+            text: '( click everywhere to restart )',
+        }
+    }
+}
