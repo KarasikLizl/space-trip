@@ -33,13 +33,13 @@ export class Player extends GameObject {
 
         this.satiety = 1;
         this.health = config.health;
-        this.lastEatTime = Date.now();
+        this.lastEatTime = this.scene.time.now;;
         this.isMoving = false;
         this.setDisplaySize(playerSettings.width, playerSettings.height);
         this.setCollideWorldBounds(true);
     }
 
-    update(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
+    update(cursors: Phaser.Types.Input.Keyboard.CursorKeys, time: number) {
         this.setVelocity(0);
         const shouldMove = (
             cursors.left.isDown ||
@@ -48,24 +48,11 @@ export class Player extends GameObject {
             cursors.down.isDown
         );
 
-        let directionMove = 0;
-
-        if (cursors.left.isDown) {
-            directionMove += 1;
-        } else if (cursors.right.isDown) {
-            directionMove += 100;
-        }
-
-        if (cursors.up.isDown) {
-            directionMove += 1000;
-        } else if (cursors.down.isDown) {
-            directionMove += 10;
-        }
-
+        let directionMove = this.getDirectionMove(cursors);
         this.updateVelicity(directionMove);
 
-        if (this.lastEatTime + playerSettings.hungerTime < Date.now()) {
-            this.lastEatTime = Date.now();
+        if (this.lastEatTime + playerSettings.hungerTime < time) {
+            this.lastEatTime = time;
             this.updateSetiety(playerSettings.hungerQSaturation);
         }
 
@@ -95,7 +82,7 @@ export class Player extends GameObject {
 
     eat(food: Food) {
         this.updateSetiety(food.getSaturation());
-        this.lastEatTime = Date.now();
+        this.lastEatTime = this.scene.time.now;
 
         food.reset();
     }
@@ -166,5 +153,23 @@ export class Player extends GameObject {
                 this.setVelocity(0);
                 break;
         }
+    }
+
+    private getDirectionMove(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
+        let directionMove = 0;
+
+        if (cursors.left.isDown) {
+            directionMove += 1;
+        } else if (cursors.right.isDown) {
+            directionMove += 100;
+        }
+
+        if (cursors.up.isDown) {
+            directionMove += 1000;
+        } else if (cursors.down.isDown) {
+            directionMove += 10;
+        }
+
+        return directionMove;
     }
 }

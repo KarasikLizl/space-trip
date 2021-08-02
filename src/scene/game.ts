@@ -48,10 +48,10 @@ export class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.enemy, this.food, (_, obj2) => this.enemy?.boost(obj2 as Food));
     }
 
-    update() {
+    update(time: number) {
         this.checkPlayerStatus();
         if (this.cursors) {
-            this.player?.update(this.cursors);
+            this.player?.update(this.cursors, time);
         }
         this.enemy?.update();
         this.scoreBoard?.update();
