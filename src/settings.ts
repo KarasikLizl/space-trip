@@ -16,7 +16,7 @@ export const gameSettings: Phaser.Types.Core.GameConfig = {
 };
 
 export const playerSettings = {
-    scaleQ: 10,
+    scaleQ: 100,
     satietyQ: 100,
     startX: 300,
     startY: 300,
@@ -40,6 +40,11 @@ export const enemySettings = {
     maxDamage: 25,
     boostSpeed: 400,
 };
+
+export const enemyGroupSettings = {
+    count: 3,
+    createDely: 1500,
+}
 
 export const scoreBoardSettings = {
     offset: 10,

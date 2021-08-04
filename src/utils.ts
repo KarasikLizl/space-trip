@@ -11,3 +11,7 @@ export const logger = (...args: any[]) => {
         console.info(...args);
     }
 }
+
+export const wait = async (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
