@@ -15,7 +15,7 @@ export class EnemyGroup extends Phaser.Physics.Arcade.Group {
 
     protected async init() {
         for(let i = 0; i < enemyGroupSettings.count; i ++) {
-            await wait(enemyGroupSettings.createDely);
+            await wait(enemyGroupSettings.createDelay);
             const enemy = new Enemy(this.scene, { speed: 0 });
             this.enemies.push(enemy);
             this.add(enemy);

@@ -10,6 +10,13 @@ const SPRITESHEET_FRAMES_COUNT = 3;
 
 export class Food extends GameObject {
     private saturation: number = 0;
+    private outer: Phaser.Geom.Rectangle = new Phaser.Geom.Rectangle(
+        0 + foodSettings.edgeOffset,
+        0 + foodSettings.edgeOffset,
+        Number(gameSettings.width) - foodSettings.edgeOffset,
+        Number(gameSettings.height) - foodSettings.edgeOffset,
+    );
+    private target: Phaser.Geom.Point = new Phaser.Geom.Point();
 
     constructor (scene: Phaser.Scene, config: FoodConfig) {
         super(scene, {
@@ -27,8 +34,8 @@ export class Food extends GameObject {
 
     reset() {
         this.saturation = this.getRandomSaturation();
-        this.setX(randomInteger(0, Number(gameSettings.width)));
-        this.setY(randomInteger(0, Number(gameSettings.height)));
+        this.outer.getRandomPoint(this.target);
+        this.body.reset(this.target.x, this.target.y);
         this.setTexture(ASSETS_MAP_KEY.food, randomInteger(0, SPRITESHEET_FRAMES_COUNT));
     }
 

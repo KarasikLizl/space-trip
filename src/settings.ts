@@ -30,6 +30,7 @@ export const playerSettings = {
 export const foodSettings = {
     minSaturation: 10,
     maxSaturation: 25,
+    edgeOffset: 20,
 };
 
 export const enemySettings = {
@@ -43,7 +44,12 @@ export const enemySettings = {
 
 export const enemyGroupSettings = {
     count: 3,
-    createDely: 1500,
+    createDelay: 1500,
+}
+
+export const foodGroupSettings = {
+    count: 4,
+    createDelay: 2500,
 }
 
 export const scoreBoardSettings = {
