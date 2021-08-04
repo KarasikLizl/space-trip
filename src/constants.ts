@@ -8,6 +8,7 @@ export enum ANIMATION_KEYS {
     MOVE_LEFT = 'move_left',
     MOVE_TOP = 'move_top',
     MOVE_BOTTOM = 'move_bottom',
+    DIE = 'die',
 }
 
 export enum SCENE_KEYS {

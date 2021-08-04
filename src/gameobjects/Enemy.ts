@@ -26,9 +26,7 @@ export class Enemy extends GameObject {
             y: -500,
         });
 
-        this.setDisplaySize(enemySettings.width, enemySettings.height);
-        this.reset();
-        this.createAnimations();
+        this.init();
         this.play(ANIMATION_KEYS.IDLE);
     }
 
@@ -79,10 +77,18 @@ export class Enemy extends GameObject {
         this.setX(coords.x);
         this.setY(coords.y);
         this.damage = this.getRandomDamage();
-        this.setEnemyVelocity();
+        this.updateVelocity();
     }
 
-    setEnemyVelocity() {
+    protected init() {
+        super.init();
+
+        this.setDisplaySize(enemySettings.width, enemySettings.height);
+        this.reset();
+        this.createAnimations();
+    }
+
+    private updateVelocity() {
         const isHorizontalVector = this.x < 0 || this.x > Number(gameSettings.width);
         this.setVelocity(0);
 
@@ -143,7 +149,7 @@ export class Enemy extends GameObject {
         return randomInteger(enemySettings.minDamage, enemySettings.maxDamage);
     }
 
-    private createAnimations() {
+    protected createAnimations() {
         this.anims.create({
             key: ANIMATION_KEYS.IDLE,
             frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { start: 0, end: 18 }),

@@ -12,7 +12,14 @@ export class GameObject extends Phaser.Physics.Arcade.Sprite {
     constructor (scene: Phaser.Scene, config: GameObjectConfig) {
         super(scene, config.x, config.y, '');
         this.speed = config.speed;
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
+
+        this.init();
     }
+
+    protected init() {
+        this.scene.add.existing(this);
+        this.scene.physics.add.existing(this);
+    }
+
+    protected createAnimations() {}
 }

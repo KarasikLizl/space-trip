@@ -26,6 +26,7 @@ export const playerSettings = {
     startHealth: 25,
     hungerTime: 5000,
     hungerQSaturation: -10,
+    baseSatiety: 1,
 };
 
 export const foodSettings = {

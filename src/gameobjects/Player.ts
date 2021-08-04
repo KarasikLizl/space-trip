@@ -8,11 +8,12 @@ import { ASSETS_MAP_KEY } from '../assets';
 
 export interface PlayerConfig extends GameObjectConfig {
     health: number;
+    satiety: number;
 }
 
 /**
  * move direction:
- * 0000;
+ * 0000 - idle
  * 1000 - вверх
  * 100 - вправо
  * 10 - вниз
@@ -23,28 +24,37 @@ export interface PlayerConfig extends GameObjectConfig {
  * 1001 - вверх влево
  */
 
+enum PlayerGameState {
+    IDLE = 'idle',
+    MOVING = 'moving',
+    DIE = 'die'
+}
+
+export enum PlayerEvents {
+    DIE = 'die',
+}
+
 export class Player extends GameObject {
     private health: number;
     private satiety: number;
-    private lastEatTime: number;
-    private isMoving: boolean;
+    private lastEatTime!: number;
+    private gameState: PlayerGameState = PlayerGameState.IDLE;
 
     constructor (scene: Phaser.Scene, config: PlayerConfig) {
         super(scene, { ...config });
 
-        this.satiety = 1;
+        this.satiety = config.satiety;
         this.health = config.health;
-        this.lastEatTime = this.scene.time.now;;
-        this.isMoving = false;
 
-        this.setCollideWorldBounds(true);
-        this.setDisplaySize(playerSettings.width, playerSettings.height);
-        this.setSize(playerSettings.width, playerSettings.height);
-        this.createAnimations();
-        this.play(ANIMATION_KEYS.IDLE);
+        this.init();
+        this.playAnimation(ANIMATION_KEYS.IDLE);
     }
 
     update(cursors: Phaser.Types.Input.Keyboard.CursorKeys, time: number) {
+        if (this.isDead()) {
+            return;
+        }
+
         this.setVelocity(0);
         const shouldMove = (
             cursors.left.isDown ||
@@ -54,7 +64,7 @@ export class Player extends GameObject {
         );
 
         let directionMove = this.getDirectionMove(cursors);
-        this.updateVelicity(directionMove);
+        this.updateVelocity(directionMove);
 
         if (this.lastEatTime + playerSettings.hungerTime < time) {
             this.lastEatTime = time;
@@ -63,9 +73,11 @@ export class Player extends GameObject {
 
         if (shouldMove) {
             this.toggleMoveAnimations(true, directionMove);
-        } else if (!shouldMove && this.isMoving) {
+        } else if (!shouldMove && this.isMoving()) {
             this.toggleMoveAnimations(false);
         }
+
+        this.checkDieStatus();
     }
 
     getSpeed() {
@@ -92,49 +104,59 @@ export class Player extends GameObject {
         food.reset();
     }
 
+    die() {
+        this.playAnimation(ANIMATION_KEYS.DIE);
+
+        setTimeout(() => {
+            this.emit(PlayerEvents.DIE);
+        }, 1000);
+    }
+
+    playAnimation(key: ANIMATION_KEYS, ignoreIfPlaying?: boolean) {
+        super.play(key as string, ignoreIfPlaying);
+
+        switch(key) {
+            case ANIMATION_KEYS.IDLE:
+                this.gameState = PlayerGameState.IDLE;
+                break;
+            case ANIMATION_KEYS.DIE:
+                this.gameState = PlayerGameState.DIE;
+                break;
+            default:
+                this.gameState = PlayerGameState.MOVING;
+                break;
+        }
+
+        return this;
+    }
+
+    protected init() {
+        super.init();
+
+        this.lastEatTime = this.scene.time.now;;
+
+        this.setCollideWorldBounds(true);
+        this.setDisplaySize(playerSettings.width, playerSettings.height);
+        this.setSize(playerSettings.width, playerSettings.height);
+        this.createAnimations();
+    }
+
+    private isDead() {
+        return this.gameState === PlayerGameState.DIE;
+    }
+
+    private isMoving() {
+        return this.gameState !== PlayerGameState.DIE &&
+            this.gameState !== PlayerGameState.IDLE;
+    }
+
     private updateSetiety(saturation: number) {
         this.scale += saturation / playerSettings.scaleQ;
         this.satiety += saturation / playerSettings.satietyQ;
         this.health += saturation;
     }
 
-    private toggleMoveAnimations(move: boolean, direction?: number) {
-        this.stop();
-        if (move) {
-            switch(direction) {
-                case 1000:
-                    this.play(ANIMATION_KEYS.MOVE_TOP);
-                    break;
-                case 1100:
-                    this.play(ANIMATION_KEYS.MOVE_TOP_RIGHT);
-                    break;
-                case 100:
-                    this.play(ANIMATION_KEYS.MOVE_RIGHT);
-                    break;
-                case 110:
-                    this.play(ANIMATION_KEYS.MOVE_BOTTOM_RIGHT);
-                    break;
-                case 10:
-                    this.play(ANIMATION_KEYS.MOVE_BOTTOM);
-                    break;
-                case 1001:
-                    this.play(ANIMATION_KEYS.MOVE_TOP_LEFT);
-                    break;
-                case 1:
-                    this.play(ANIMATION_KEYS.MOVE_LEFT);
-                    break;
-                case 11:
-                    this.play(ANIMATION_KEYS.MOVE_BOTTOM_LEFT);
-                    break;
-                default: break;
-            }
-        } else {
-            this.play(ANIMATION_KEYS.IDLE);
-        }
-        this.isMoving = move;
-    }
-
-    private updateVelicity(direction: number) {
+    private updateVelocity(direction: number) {
         this.setVelocity(0);
         const speed = this.getSpeed();
         switch(direction) {
@@ -168,6 +190,7 @@ export class Player extends GameObject {
         }
     }
 
+    // TODO: сделать общим методом в GameObject.ts
     private getDirectionMove(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
         let directionMove = 0;
 
@@ -186,7 +209,42 @@ export class Player extends GameObject {
         return directionMove;
     }
 
-    private createAnimations() {
+    private toggleMoveAnimations(move: boolean, direction?: number) {
+        this.stop();
+        if (move) {
+            switch(direction) {
+                case 1000:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_TOP);
+                    break;
+                case 1100:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_TOP_RIGHT);
+                    break;
+                case 100:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_RIGHT);
+                    break;
+                case 110:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_BOTTOM_RIGHT);
+                    break;
+                case 10:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_BOTTOM);
+                    break;
+                case 1001:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_TOP_LEFT);
+                    break;
+                case 1:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_LEFT);
+                    break;
+                case 11:
+                    this.playAnimation(ANIMATION_KEYS.MOVE_BOTTOM_LEFT);
+                    break;
+                default: break;
+            }
+        } else {
+            this.playAnimation(ANIMATION_KEYS.IDLE);
+        }
+    }
+
+    protected createAnimations() {
         this.anims.create({
             key: ANIMATION_KEYS.IDLE,
             frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [ 25 ] }),
@@ -249,5 +307,21 @@ export class Player extends GameObject {
             frameRate: 1,
             repeat: -1,
         });
+
+        this.anims.create({
+            key: ANIMATION_KEYS.DIE,
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.player, { frames: [15] }),
+            frameRate: 1,
+            repeat: 0,
+        });
+    }
+
+    private checkDieStatus() {
+        const isEnd = this.getHealth() < 0 ||
+        this.getSatiety() < .7;
+
+        if (isEnd) {
+            this.die();
+        }
     }
 }

@@ -18,7 +18,7 @@ export class Food extends GameObject {
             y: 0,
         });
 
-        this.setDisplaySize(foodSettings.width, foodSettings.height);
+        this.init();
         this.reset();
     }
 
@@ -31,6 +31,12 @@ export class Food extends GameObject {
         this.setX(randomInteger(0, Number(gameSettings.width)));
         this.setY(randomInteger(0, Number(gameSettings.height)));
         this.setTexture(ASSETS_MAP_KEY.food, randomInteger(0, SPRITESHEET_FRAMES_COUNT));
+    }
+
+    protected init() {
+        super.init();
+
+        this.setDisplaySize(foodSettings.width, foodSettings.height);
     }
 
     private getRandomSaturation() {

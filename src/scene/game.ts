@@ -1,7 +1,7 @@
 import { SCENE_KEYS } from '../constants';
 import { Enemy } from '../gameobjects/Enemy';
 import { Food } from '../gameobjects/Food';
-import { Player } from '../gameobjects/Player';
+import { Player, PlayerEvents } from '../gameobjects/Player';
 import { playerSettings } from '../settings';
 import { logger } from '../utils';
 import { ScoreBoard } from '../gameobjects/ScoreBoard';
@@ -31,6 +31,10 @@ export class GameScene extends Phaser.Scene {
             y: playerSettings.startY,
             health: playerSettings.startHealth,
             speed: playerSettings.startSpeed,
+            satiety: playerSettings.baseSatiety,
+        });
+        this.player.on(PlayerEvents.DIE, () => {
+            this.scene.start(SCENE_KEYS.END);
         });
         this.food = new Food(this, { speed: 0 });
         this.enemy = new Enemy(this, { speed: 0 });
@@ -42,24 +46,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     update(time: number) {
-        this.checkPlayerStatus();
         if (this.cursors) {
             this.player?.update(this.cursors, time);
         }
         this.enemy?.update();
         this.scoreBoard?.update();
-    }
-
-    private checkPlayerStatus() {
-        if (!this.player) {
-            return;
-        }
-
-        const isEnd = this.player.getHealth() < 0 ||
-            this.player.getSatiety() < .7;
-
-        if (isEnd) {
-            this.scene.start(SCENE_KEYS.END);
-        }
     }
 }
