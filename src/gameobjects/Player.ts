@@ -105,6 +105,7 @@ export class Player extends GameObject {
     }
 
     die() {
+        this.setVelocity(0);
         this.playAnimation(ANIMATION_KEYS.DIE);
 
         setTimeout(() => {
@@ -136,8 +137,6 @@ export class Player extends GameObject {
         this.lastEatTime = this.scene.time.now;;
 
         this.setCollideWorldBounds(true);
-        this.setDisplaySize(playerSettings.width, playerSettings.height);
-        this.setSize(playerSettings.width, playerSettings.height);
         this.createAnimations();
     }
 
@@ -151,7 +150,7 @@ export class Player extends GameObject {
     }
 
     private updateSetiety(saturation: number) {
-        this.scale += saturation / playerSettings.scaleQ;
+        this.setScale(this.scale + saturation / playerSettings.scaleQ);
         this.satiety += saturation / playerSettings.satietyQ;
         this.health += saturation;
     }

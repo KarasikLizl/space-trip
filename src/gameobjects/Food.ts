@@ -6,7 +6,7 @@ import { GameObject, GameObjectConfig } from "./GameObject";
 
 export interface FoodConfig extends Pick<GameObjectConfig, 'speed'> {}
 
-const SPRITESHEET_FRAMES_COUNT = 4;
+const SPRITESHEET_FRAMES_COUNT = 3;
 
 export class Food extends GameObject {
     private saturation: number = 0;
@@ -35,8 +35,6 @@ export class Food extends GameObject {
 
     protected init() {
         super.init();
-
-        this.setDisplaySize(foodSettings.width, foodSettings.height);
     }
 
     private getRandomSaturation() {

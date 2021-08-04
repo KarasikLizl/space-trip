@@ -83,7 +83,6 @@ export class Enemy extends GameObject {
     protected init() {
         super.init();
 
-        this.setDisplaySize(enemySettings.width, enemySettings.height);
         this.reset();
         this.createAnimations();
     }
