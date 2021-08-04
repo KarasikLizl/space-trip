@@ -6,12 +6,13 @@ import { logger } from '../utils';
 import { ScoreBoard } from '../gameobjects/ScoreBoard';
 import { ASSETS_MAP_KEY } from '../assets';
 import { Enemy } from '../gameobjects/Enemy';
+import { EnemyGroup } from '../gameobjects/EnemyGroup';
 
 export class GameScene extends Phaser.Scene {
     cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
     player!: Player;
     food!: Food;
-    enemyGroup!: Enemy;
+    enemyGroup!: EnemyGroup;
     scoreBoard!: ScoreBoard;
 
     constructor() {
@@ -33,7 +34,7 @@ export class GameScene extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.food, (_, obj2) => this.player.eat(obj2 as Food));
         this.physics.add.overlap(this.player, this.enemyGroup, (_, obj2) => this.player.setDamage(obj2 as Enemy));
-        this.physics.add.overlap(this.enemyGroup, this.food, (enemy, obj2) => (enemy as Enemy).boost(obj2 as Food));
+        this.physics.add.overlap(this.enemyGroup, this.food, (obj1, enemy) => (enemy as Enemy).boost(obj1 as Food));
     }
 
     update(time: number) {
@@ -60,6 +61,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     private createEnemies() {
-        this.enemyGroup = new Enemy(this, { speed: 0 });
+        this.enemyGroup = new EnemyGroup(this.physics.world, this);
     }
 }

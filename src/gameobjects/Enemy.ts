@@ -26,7 +26,6 @@ export class Enemy extends GameObject {
             y: -500,
         });
 
-        this.init();
         this.play(ANIMATION_KEYS.IDLE);
     }
 
@@ -35,6 +34,7 @@ export class Enemy extends GameObject {
     }
 
     update() {
+        console.log(this.body.velocity);
         const gameWidth = Number(gameSettings.width);
         const gameHeight = Number(gameSettings.height);
 
@@ -83,7 +83,6 @@ export class Enemy extends GameObject {
     protected init() {
         super.init();
 
-        this.reset();
         this.createAnimations();
     }
 

@@ -18,7 +18,6 @@ export class Food extends GameObject {
             y: 0,
         });
 
-        this.init();
         this.reset();
     }
 

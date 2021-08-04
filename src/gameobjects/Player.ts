@@ -46,7 +46,6 @@ export class Player extends GameObject {
         this.satiety = config.satiety;
         this.health = config.health;
 
-        this.init();
         this.playAnimation(ANIMATION_KEYS.IDLE);
     }
 
