@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { gameSettings, scoreBoardSettings } from '../settings';
+import { scoreBoardSettings } from './settings';
+import { globalSettings, uiSettings } from '../../settings';
 
 export class ScoreBoard extends Phaser.GameObjects.Layer {
     scoreBoard: Phaser.GameObjects.Text;
@@ -13,7 +14,7 @@ export class ScoreBoard extends Phaser.GameObjects.Layer {
             text: this.getScoreText(this.score),
         })) as Phaser.GameObjects.Text;
         this.scoreBoard.setOrigin(1, 0)
-            .setX(Number(gameSettings.width) - scoreBoardSettings.offset)
+            .setX(Number(globalSettings.width) - scoreBoardSettings.offset)
             .setY(scoreBoardSettings.offset);
 
         // TODO: нужно добавить остальную информацию об игре.
@@ -25,6 +26,6 @@ export class ScoreBoard extends Phaser.GameObjects.Layer {
     }
 
     private getScoreText(score: number) {
-        return `Score: ${score}`;
+        return `${uiSettings.scoreBoard.scoreText} ${score}`;
     }
 }

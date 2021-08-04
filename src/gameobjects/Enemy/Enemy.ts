@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
-import { ASSETS_MAP_KEY } from '../assets';
-import { ANIMATION_KEYS } from '../constants';
-import { enemySettings, gameSettings } from '../settings';
-import { randomInteger } from '../utils';
-import { Food } from './Food';
-import { GameObject, GameObjectConfig } from "./GameObject";
+import { ASSETS_MAP_KEY } from '../../assets';
+import { ANIMATION_KEYS } from '../../constants';
+import { enemySettings } from './settings';
+import { globalSettings } from '../../settings';
+import { randomInteger } from '../../utils';
+import { Food } from '../Food/Food';
+import { GameObject, GameObjectConfig } from "../GameObject/GameObject";
 
 export interface EnemyConfig extends Pick<GameObjectConfig, 'speed'> {};
 
@@ -34,17 +35,16 @@ export class Enemy extends GameObject {
     }
 
     update() {
-        console.log(this.body.velocity);
-        const gameWidth = Number(gameSettings.width);
-        const gameHeight = Number(gameSettings.height);
+        const gameWidth = Number(globalSettings.width);
+        const gameHeight = Number(globalSettings.height);
 
-        if (this.x > gameWidth + enemySettings.edgeOffset) {
+        if (this.x > gameWidth + enemySettings.resetPositionOffset) {
             this.reset();
-        } else if (this.x < (0 - (gameWidth + enemySettings.edgeOffset))) {
+        } else if (this.x < (0 - (gameWidth + enemySettings.resetPositionOffset))) {
             this.reset();
-        } else if (this.y < (0 - (gameHeight + enemySettings.edgeOffset))) {
+        } else if (this.y < (0 - (gameHeight + enemySettings.resetPositionOffset))) {
             this.reset();
-        } else if (this.y > gameHeight + enemySettings.edgeOffset) {
+        } else if (this.y > gameHeight + enemySettings.resetPositionOffset) {
             this.reset();
         }
     }
@@ -87,7 +87,7 @@ export class Enemy extends GameObject {
     }
 
     private updateVelocity() {
-        const isHorizontalVector = this.x < 0 || this.x > Number(gameSettings.width);
+        const isHorizontalVector = this.x < 0 || this.x > Number(globalSettings.width);
         this.setVelocity(0);
 
         if(isHorizontalVector) {
@@ -113,8 +113,8 @@ export class Enemy extends GameObject {
         const isHorizontal = Math.random() >= .5;
         const isLeft = Math.random() >= .5;
         const isTop = Math.random() >= .5;
-        const gameWidth = Number(gameSettings.width);
-        const gameHeight = Number(gameSettings.height);
+        const gameWidth = Number(globalSettings.width);
+        const gameHeight = Number(globalSettings.height);
 
         if (isHorizontal) {
             if (isLeft) {

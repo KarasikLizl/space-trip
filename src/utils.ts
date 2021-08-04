@@ -1,4 +1,4 @@
-import { gameSettings } from './settings';
+import { globalSettings } from './settings';
 
 export const randomInteger = (min: number, max: number) => {
     // получить случайное число от (min-0.5) до (max+0.5)
@@ -7,7 +7,7 @@ export const randomInteger = (min: number, max: number) => {
 }
 
 export const logger = (...args: any[]) => {
-    if (gameSettings.physics?.arcade?.debug) {
+    if (globalSettings.physics?.arcade?.debug) {
         console.info(...args);
     }
 }

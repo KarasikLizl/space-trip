@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 
 const body = document.querySelector('body');
 const bodyRect = body?.getBoundingClientRect();
-export const gameSettings: Phaser.Types.Core.GameConfig = {
+
+export const globalSettings: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     width: bodyRect?.width || 0,
     height: bodyRect?.height || 0,
@@ -14,47 +15,6 @@ export const gameSettings: Phaser.Types.Core.GameConfig = {
         }
     },
 };
-
-export const playerSettings = {
-    scaleQ: 100,
-    satietyQ: 100,
-    startX: 300,
-    startY: 300,
-    startSpeed: 150,
-    startHealth: 25,
-    hungerTime: 15000,
-    hungerQSaturation: -10,
-    baseSatiety: 1,
-};
-
-export const foodSettings = {
-    minSaturation: 10,
-    maxSaturation: 25,
-    edgeOffset: 20,
-};
-
-export const enemySettings = {
-    startPositionOffset: 20,
-    edgeOffset: 100,
-    speed: 200,
-    minDamage: 10,
-    maxDamage: 25,
-    boostSpeed: 400,
-};
-
-export const enemyGroupSettings = {
-    count: 3,
-    createDelay: 1500,
-}
-
-export const foodGroupSettings = {
-    count: 4,
-    createDelay: 2500,
-}
-
-export const scoreBoardSettings = {
-    offset: 10,
-}
 
 export const uiSettings = {
     font: 'Roboto',
@@ -81,5 +41,8 @@ export const uiSettings = {
             fontColor: '#fff',
             text: '( нажмите в любое место, что бы начать заново )',
         }
+    },
+    scoreBoard: {
+        scoreText: 'Счет: ',
     }
 }

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { SCENE_KEYS } from '../constants';
-import { gameSettings, uiSettings } from '../settings';
+import { globalSettings, uiSettings } from '../settings';
 import { logger } from '../utils';
 
 export class MenuScene extends Phaser.Scene {
@@ -9,7 +9,7 @@ export class MenuScene extends Phaser.Scene {
     }
 
     create() {
-        const gameWidth = (Number(gameSettings.width) || 0);
+        const gameWidth = (Number(globalSettings.width) || 0);
         this.add.text(gameWidth / 2, 230, uiSettings.menu.title.text, {
             fontFamily: uiSettings.font,
             color: uiSettings.menu.title.fontColor,

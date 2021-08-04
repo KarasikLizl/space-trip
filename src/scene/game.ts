@@ -1,13 +1,12 @@
 import { SCENE_KEYS } from '../constants';
-import { Food } from '../gameobjects/Food';
-import { Player, PlayerEvents } from '../gameobjects/Player';
-import { playerSettings } from '../settings';
+import { Food } from '../gameobjects/Food/Food';
+import { Player, PlayerEvents } from '../gameobjects/Player/Player';
 import { logger } from '../utils';
-import { ScoreBoard } from '../gameobjects/ScoreBoard';
+import { ScoreBoard } from '../gameobjects/ScoreBoard/ScoreBoard';
 import { ASSETS_MAP_KEY } from '../assets';
-import { Enemy } from '../gameobjects/Enemy';
-import { EnemyGroup } from '../gameobjects/EnemyGroup';
-import { FoodGroup } from '../gameobjects/FoodGroup';
+import { Enemy } from '../gameobjects/Enemy/Enemy';
+import { EnemyGroup } from '../gameobjects/Enemy/EnemyGroup';
+import { FoodGroup } from '../gameobjects/Food/FoodGroup';
 
 export class GameScene extends Phaser.Scene {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -45,13 +44,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     private createPlayer() {
-        this.player = new Player(this, {
-            x: playerSettings.startX,
-            y: playerSettings.startY,
-            health: playerSettings.startHealth,
-            speed: playerSettings.startSpeed,
-            satiety: playerSettings.baseSatiety,
-        });
+        this.player = new Player(this);
         this.player.on(PlayerEvents.DIE, () => {
             this.scene.start(SCENE_KEYS.END);
         });

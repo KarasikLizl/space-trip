@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import { foodGroupSettings } from '../settings';
-import { wait } from '../utils';
+import { foodGroupSettings } from './settings';
+import { wait } from '../../utils';
 import { Food } from './Food';
 
 export class FoodGroup extends Phaser.Physics.Arcade.Group {
@@ -14,7 +14,7 @@ export class FoodGroup extends Phaser.Physics.Arcade.Group {
     }
 
     protected async init() {
-        for(let i = 0; i < foodGroupSettings.count; i ++) {
+        for(let i = 0; i < foodGroupSettings.maxFoodOnScene; i ++) {
             await wait(foodGroupSettings.createDelay);
             const food = new Food(this.scene, { speed: 0 });
             this.foods.push(food);

@@ -4,10 +4,10 @@ import { GameScene} from './scene/game';
 import { EndScene } from './scene/end';
 import { BootScene } from './scene/boot';
 import { PreloadScene } from './scene/preload';
-import { gameSettings } from './settings';
+import { globalSettings } from './settings';
 
 const config: Phaser.Types.Core.GameConfig = {
-    ...gameSettings,
+    ...globalSettings,
     scene: [BootScene, PreloadScene, MenuScene, GameScene, EndScene],
 };
 

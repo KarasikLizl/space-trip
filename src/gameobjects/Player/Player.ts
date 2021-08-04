@@ -1,15 +1,10 @@
 import Phaser from "phaser";
-import { ANIMATION_KEYS } from '../constants';
-import { Food } from "./Food";
-import { GameObject, GameObjectConfig } from "./GameObject";
-import { playerSettings } from '../settings';
-import { Enemy } from './Enemy';
-import { ASSETS_MAP_KEY } from '../assets';
-
-export interface PlayerConfig extends GameObjectConfig {
-    health: number;
-    satiety: number;
-}
+import { ANIMATION_KEYS } from '../../constants';
+import { Food } from "../Food/Food";
+import { GameObject } from "../GameObject/GameObject";
+import { playerSettings } from './settings';
+import { Enemy } from '../Enemy/Enemy';
+import { ASSETS_MAP_KEY } from '../../assets';
 
 /**
  * move direction:
@@ -40,11 +35,15 @@ export class Player extends GameObject {
     private lastEatTime!: number;
     private gameState: PlayerGameState = PlayerGameState.IDLE;
 
-    constructor (scene: Phaser.Scene, config: PlayerConfig) {
-        super(scene, { ...config });
+    constructor (scene: Phaser.Scene) {
+        super(scene, {
+            x: playerSettings.startX,
+            y: playerSettings.startY,
+            speed: playerSettings.startSpeed,
+        });
 
-        this.satiety = config.satiety;
-        this.health = config.health;
+        this.satiety = playerSettings.startSatiety;
+        this.health = playerSettings.startHealth;
 
         this.playAnimation(ANIMATION_KEYS.IDLE);
     }
@@ -67,7 +66,7 @@ export class Player extends GameObject {
 
         if (this.lastEatTime + playerSettings.hungerTime < time) {
             this.lastEatTime = time;
-            this.updateSetiety(playerSettings.hungerQSaturation);
+            this.updateSetiety(playerSettings.hunger);
         }
 
         if (shouldMove) {

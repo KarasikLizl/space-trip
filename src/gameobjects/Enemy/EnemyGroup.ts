@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { Enemy } from './Enemy';
-import { enemyGroupSettings } from '../settings';
-import { wait } from '../utils';
+import { enemyGroupSettings } from './settings';
+import { wait } from '../../utils';
 
 export class EnemyGroup extends Phaser.Physics.Arcade.Group {
     private enemies: Enemy[] = [];
@@ -14,7 +14,7 @@ export class EnemyGroup extends Phaser.Physics.Arcade.Group {
     }
 
     protected async init() {
-        for(let i = 0; i < enemyGroupSettings.count; i ++) {
+        for(let i = 0; i < enemyGroupSettings.maxEnemiesOnScene; i ++) {
             await wait(enemyGroupSettings.createDelay);
             const enemy = new Enemy(this.scene, { speed: 0 });
             this.enemies.push(enemy);
