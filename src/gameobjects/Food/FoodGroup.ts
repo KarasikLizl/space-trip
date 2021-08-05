@@ -33,7 +33,7 @@ export class FoodGroup extends Phaser.Physics.Arcade.Group {
             targets: food,
             scale: 1.1,
             props: {
-                scale: { value: 1.5, duration: 1500 },
+                scale: { value: 1.5, duration: 1000 },
             },
             repeat: -1,
             yoyo: true,

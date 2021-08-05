@@ -18,33 +18,4 @@ export const globalSettings: Phaser.Types.Core.GameConfig = {
 
 export const uiSettings = {
     font: 'Roboto',
-    menu: {
-        title: {
-            fontSize: 100,
-            fontColor: '#fff',
-            text: 'Добро пожаловать в \n хомячий бедтрип',
-        },
-        description: {
-            fontSize: 25,
-            fontColor: '#fff',
-            text: '( нажмите в любое место )',
-        }
-    },
-    end: {
-        title: {
-            fontSize: 100,
-            fontColor: '#fff',
-            text: 'Вас отпустило',
-        },
-        description: {
-            fontSize: 25,
-            fontColor: '#fff',
-            text: '( нажмите в любое место, что бы начать заново )',
-        }
-    },
-    scoreBoard: {
-        timeText: 'Время: ',
-        healthText: 'Здоровье: ',
-        satietyText: 'Сытость: '
-    }
 }

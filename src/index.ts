@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import { MenuScene } from './scene/menu';
-import { GameScene} from './scene/game';
-import { EndScene } from './scene/end';
-import { BootScene } from './scene/boot';
-import { PreloadScene } from './scene/preload';
+import { MenuScene } from './scene/Menu/menu';
+import { GameScene} from './scene/Game/game';
+import { EndScene } from './scene/End/end';
+import { BootScene } from './scene/Boot/boot';
+import { PreloadScene } from './scene/Preload/preload';
 import { globalSettings } from './settings';
 
 const config: Phaser.Types.Core.GameConfig = {

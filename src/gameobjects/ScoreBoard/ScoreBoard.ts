@@ -14,6 +14,9 @@ export class ScoreBoard extends Phaser.GameObjects.Layer {
 
         this.scoreBoard = this.add(scene.make.text({
             text: this.getInfoText(0, 0, 0),
+            style: {
+                fontFamily: uiSettings.font,
+            }
         })) as Phaser.GameObjects.Text;
         this.scoreBoard.setOrigin(0, 0)
             .setX(scoreBoardSettings.offsetX)
@@ -27,9 +30,9 @@ export class ScoreBoard extends Phaser.GameObjects.Layer {
 
     private getInfoText(time: number, health: number, satiety: number) {
         return `
-${uiSettings.scoreBoard.timeText}${this.getTimeText(time)}
-${uiSettings.scoreBoard.healthText}${health}
-${uiSettings.scoreBoard.satietyText}${satiety.toFixed(2)}
+${scoreBoardSettings.ui.timeText}${this.getTimeText(time)}
+${scoreBoardSettings.ui.healthText}${health}
+${scoreBoardSettings.ui.satietyText}${satiety.toFixed(2)}
         `;
     }
 
@@ -39,7 +42,7 @@ ${uiSettings.scoreBoard.satietyText}${satiety.toFixed(2)}
             return `${seconds} сек.`;
         } else if (seconds < 3600) {
             return `${Math.floor(seconds / 60)} мин. ${seconds % 60} сек.`;
-        } 
+        }
         let hours = Math.floor(seconds / 3600);
         let substractedSeconds = seconds % 3600;
         return `${hours} час. ${Math.floor(substractedSeconds / 60)} мин. ${substractedSeconds % 60} сек.`;

@@ -1,14 +1,14 @@
-import { SCENE_KEYS } from '../constants';
-import { Food } from '../gameobjects/Food/Food';
-import { Player, PlayerEvents } from '../gameobjects/Player/Player';
-import { logger } from '../utils';
-import { ScoreBoard } from '../gameobjects/ScoreBoard/ScoreBoard';
-import { ASSETS_MAP_KEY } from '../assets';
-import { Enemy } from '../gameobjects/Enemy/Enemy';
-import { EnemyGroup } from '../gameobjects/Enemy/EnemyGroup';
-import { FoodGroup } from '../gameobjects/Food/FoodGroup';
-import { Speed } from '../gameobjects/Effect/Speed';
-import { globalSettings } from '../settings';
+import { SCENE_KEYS } from '../../constants';
+import { Food } from '../../gameobjects/Food/Food';
+import { Player, PlayerEvents } from '../../gameobjects/Player/Player';
+import { logger } from '../../utils';
+import { ScoreBoard } from '../../gameobjects/ScoreBoard/ScoreBoard';
+import { ASSETS_MAP_KEY } from '../../assets';
+import { Enemy } from '../../gameobjects/Enemy/Enemy';
+import { EnemyGroup } from '../../gameobjects/Enemy/EnemyGroup';
+import { FoodGroup } from '../../gameobjects/Food/FoodGroup';
+import { Speed } from '../../gameobjects/Effect/Speed';
+import { globalSettings } from '../../settings';
 
 export class GameScene extends Phaser.Scene {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import { SCENE_KEYS } from '../constants';
-import { logger } from '../utils';
+import { SCENE_KEYS } from '../../constants';
+import { logger } from '../../utils';
 
 export class BootScene extends Phaser.Scene {
     constructor() {
