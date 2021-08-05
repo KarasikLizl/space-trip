@@ -4,28 +4,29 @@ import { uiSettings } from '../../settings';
 import { Player } from '../Player/Player';
 
 export class ScoreBoard extends Phaser.GameObjects.Layer {
-    scoreBoard: Phaser.GameObjects.Text;
+    board: Phaser.GameObjects.Text;
     startTime: number = 0;
 
     constructor(scene: Phaser.Scene) {
         super(scene);
         this.scene.add.existing(this);
-        this.startTime = this.scene.time.now;
 
-        this.scoreBoard = this.add(scene.make.text({
+        this.board = this.add(scene.make.text({
             text: this.getInfoText(0, 0, 0),
             style: {
                 fontFamily: uiSettings.font,
             }
         })) as Phaser.GameObjects.Text;
-        this.scoreBoard.setOrigin(0, 0)
+        this.board.setOrigin(0, 0)
             .setX(scoreBoardSettings.offsetX)
             .setY(scoreBoardSettings.offsetY);
+
+        this.startTime = this.scene.time.now;
     }
 
     update(player: Player) {
         let time = this.scene.time.now - this.startTime;
-        this.scoreBoard.setText(this.getInfoText(time, player.getHealth(), player.getSatiety()));
+        this.board.setText(this.getInfoText(time, player.getHealth(), player.getSatiety()));
     }
 
     private getInfoText(time: number, health: number, satiety: number) {

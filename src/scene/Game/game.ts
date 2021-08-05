@@ -38,7 +38,7 @@ export class GameScene extends Phaser.Scene {
         this.createPlayer();
         this.createFoods();
         this.createEnemies();
-        this.scoreBoard = new ScoreBoard(this);
+        this.createScoreBoard();
 
         this.physics.add.overlap(this.player, this.foodGroup, (obj1, obj2) => {
             const player = obj1 as Player;
@@ -86,5 +86,9 @@ export class GameScene extends Phaser.Scene {
 
     private createEnemies() {
         this.enemyGroup = new EnemyGroup(this.physics.world, this);
+    }
+
+    private createScoreBoard() {
+        this.scoreBoard = new ScoreBoard(this);
     }
 }
