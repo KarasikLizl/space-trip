@@ -13,14 +13,16 @@ export class Saturation extends Effect {
 
     start(target: EffectTarget ,now: number) {
         super.start(target, now);
-        const player = this.target as Player;
-        player.updateSetiety(this.saturation);
+        if (this.target instanceof Player) {
+            this.target.updateSetiety(this.saturation);
+        }
     }
 
     end(now: number) {
         super.end(now);
 
-        const player = this.target as Player;
-        player.updateSetiety(-this.saturation);
+        if (this.target instanceof Player) {
+            this.target.updateSetiety(-this.saturation);
+        }
     }
 }

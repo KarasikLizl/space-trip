@@ -1,7 +1,8 @@
 import { Player } from '../Player/Player';
 import { Enemy } from '../Enemy/Enemy';
+import { GameObject } from '../GameObject/GameObject';
 
-export type EffectTarget = Player | Enemy;
+export type EffectTarget = Player | Enemy | GameObject;
 
 export class Effect {
     isEnded: boolean = false;

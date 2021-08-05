@@ -3,7 +3,9 @@ import { ANIMATION_KEYS } from '../../constants';
 import { GameObject } from "../GameObject/GameObject";
 import { playerSettings } from './settings';
 import { ASSETS_MAP_KEY } from '../../assets';
+import { Hungry } from '../Effect/Hungry';
 import { Effect } from '../Effect/Effect';
+import { Saturation } from '../Effect/Saturation';
 
 /**
  * move direction:
@@ -32,7 +34,6 @@ export class Player extends GameObject {
     private health: number = 0;
     private satiety: number;
     private gameState: PlayerGameState = PlayerGameState.IDLE;
-    private effects: Effect[] = [];
 
     constructor (scene: Phaser.Scene) {
         super(scene, {
@@ -43,11 +44,14 @@ export class Player extends GameObject {
 
         this.satiety = playerSettings.startSatiety;
         this.health = playerSettings.startHealth;
+        const hungryEffect = new Hungry();
+        hungryEffect.start(this, this.scene.time.now);
+        this.effects.push(hungryEffect);
 
         this.playAnimation(ANIMATION_KEYS.IDLE);
     }
 
-    update(cursors: Phaser.Types.Input.Keyboard.CursorKeys, time: number) {
+    update(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
         if (this.isDead()) {
             return;
         }
@@ -73,8 +77,6 @@ export class Player extends GameObject {
         }
 
         this.checkDieStatus();
-
-        console.log(this.satiety, this.health);
     }
 
     getSpeed() {
@@ -95,19 +97,18 @@ export class Player extends GameObject {
         this.emit(PlayerEvents.DIE);
     }
 
-    addEffect(effect: Effect) {
-        this.effects.push(effect);
-        effect.start(this, this.scene.time.now);
-    }
-
-    removeEffect(effect: Effect) {
-        effect.isEnded = true;
-    }
-
     updateSetiety(saturation: number) {
         this.setScale(this.scale + saturation / playerSettings.scaleQ);
         this.satiety += saturation / playerSettings.satietyQ;
         this.health += saturation;
+    }
+
+    addEffect(effect: Effect) {
+        super.addEffect(effect);
+
+        if (effect instanceof Saturation) {
+            (this.effects[0] as Hungry).lasEatTime = this.scene.time.now;
+        }
     }
 
     private playAnimation(key: ANIMATION_KEYS, ignoreIfPlaying?: boolean) {
@@ -305,26 +306,11 @@ export class Player extends GameObject {
     }
 
     private checkDieStatus() {
-        const isEnd = this.getHealth() < 0 ||
-        this.getSatiety() < .7;
+        const isEnd = this.getHealth() < playerSettings.minHealth ||
+        this.getSatiety() < playerSettings.minSatiety;
 
         if (isEnd) {
             this.die();
         }
-    }
-
-    private checkEffects() {
-        this.effects = this.effects.filter((effect) => {
-            if (effect.isEnded) {
-                effect.end(this.scene.time.now);
-            }
-            return !effect.isEnded;
-        });
-    }
-
-    private updateEffects() {
-        this.effects.forEach((effect) => {
-            effect.update(this.scene.time.now);
-        })
     }
 }

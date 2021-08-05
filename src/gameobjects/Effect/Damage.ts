@@ -12,6 +12,11 @@ export class Damage extends Effect {
 
     start(target: EffectTarget ,now: number) {
         super.start(target, now);
+
+        if (!(this.target instanceof Player)) {
+            return;
+        }
+
         const player = this.target as Player;
         player.updateSetiety(-this.damage);
     }

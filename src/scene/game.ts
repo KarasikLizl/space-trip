@@ -7,6 +7,7 @@ import { ASSETS_MAP_KEY } from '../assets';
 import { Enemy } from '../gameobjects/Enemy/Enemy';
 import { EnemyGroup } from '../gameobjects/Enemy/EnemyGroup';
 import { FoodGroup } from '../gameobjects/Food/FoodGroup';
+import { Speed } from '../gameobjects/Effect/Speed';
 
 enum GameState {
     RUN = 'run',
@@ -53,12 +54,13 @@ export class GameScene extends Phaser.Scene {
             player.addEffect(damageEffect);
             enemy.reset();
         });
-        // this.physics.add.overlap(this.foodGroup, this.enemyGroup, (obj1, obj2) => {
-        //     const food = obj1 as Food;
-        //     const enemy = obj2 as Enemy;
-        //     food.reset();
-        //     enemy.boost(food);
-        // });
+        this.physics.add.overlap(this.foodGroup, this.enemyGroup, (obj1, obj2) => {
+            const food = obj1 as Food;
+            const enemy = obj2 as Enemy;
+            const speedEffect = new Speed();
+            enemy.addEffect(speedEffect);
+            food.reset();
+        });
     }
 
     update(time: number) {
@@ -66,7 +68,7 @@ export class GameScene extends Phaser.Scene {
             return;
         }
 
-        this.player.update(this.cursors, time);
+        this.player.update(this.cursors);
         this.enemyGroup.update();
         this.scoreBoard.update();
     }
