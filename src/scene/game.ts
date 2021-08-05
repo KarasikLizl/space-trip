@@ -67,7 +67,7 @@ export class GameScene extends Phaser.Scene {
     update(time: number) {
         this.player.update(this.cursors);
         this.enemyGroup.update();
-        this.scoreBoard.update();
+        this.scoreBoard.update(this.player);
     }
 
     private createPlayer() {

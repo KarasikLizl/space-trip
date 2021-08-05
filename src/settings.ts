@@ -43,6 +43,8 @@ export const uiSettings = {
         }
     },
     scoreBoard: {
-        scoreText: 'Счет: ',
+        timeText: 'Время: ',
+        healthText: 'Здоровье: ',
+        satietyText: 'Сытость: '
     }
 }

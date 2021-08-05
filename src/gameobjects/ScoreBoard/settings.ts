@@ -1,3 +1,4 @@
 export const scoreBoardSettings = {
-    offset: 10,
+    offsetX: 10,
+    offsetY: -10,
 }
