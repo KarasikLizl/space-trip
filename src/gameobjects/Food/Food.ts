@@ -4,6 +4,7 @@ import { foodSettings } from './settings';
 import { globalSettings } from '../../settings';
 import { randomInteger } from '../../utils';
 import { GameObject, GameObjectConfig } from "../GameObject/GameObject";
+import { Saturation } from '../Effect/Saturation';
 
 export interface FoodConfig extends Pick<GameObjectConfig, 'speed'> {}
 
@@ -29,8 +30,8 @@ export class Food extends GameObject {
         this.reset();
     }
 
-    getSaturation() {
-        return this.saturation
+    getSaturationEffect(): Saturation {
+        return new Saturation(this.saturation);
     }
 
     reset() {

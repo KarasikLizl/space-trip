@@ -8,12 +8,18 @@ import { Enemy } from '../gameobjects/Enemy/Enemy';
 import { EnemyGroup } from '../gameobjects/Enemy/EnemyGroup';
 import { FoodGroup } from '../gameobjects/Food/FoodGroup';
 
+enum GameState {
+    RUN = 'run',
+    END = 'end',
+}
+
 export class GameScene extends Phaser.Scene {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
     private player!: Player;
     private foodGroup!: FoodGroup;
     private enemyGroup!: EnemyGroup;
     private scoreBoard!: ScoreBoard;
+    private gameState: GameState = GameState.RUN;
 
     constructor() {
         super(SCENE_KEYS.GAME);
@@ -32,12 +38,34 @@ export class GameScene extends Phaser.Scene {
         this.createEnemies();
         this.scoreBoard = new ScoreBoard(this);
 
-        this.physics.add.overlap(this.player, this.foodGroup, (_, obj2) => this.player.eat(obj2 as Food));
-        this.physics.add.overlap(this.player, this.enemyGroup, (_, obj2) => this.player.setDamage(obj2 as Enemy));
-        this.physics.add.overlap(this.foodGroup, this.enemyGroup, (obj1, enemy) => (enemy as Enemy).boost(obj1 as Food));
+        this.physics.add.overlap(this.player, this.foodGroup, (obj1, obj2) => {
+            const player = obj1 as Player;
+            const food = obj2 as Food;
+            const saturationEffect = food.getSaturationEffect();
+
+            player.addEffect(saturationEffect);
+            food.reset();
+        });
+        this.physics.add.overlap(this.player, this.enemyGroup, (obj1, obj2) => {
+            const player = obj1 as Player;
+            const enemy = obj2 as Enemy;
+            const damageEffect = enemy.getDamageEffect();
+            player.addEffect(damageEffect);
+            enemy.reset();
+        });
+        // this.physics.add.overlap(this.foodGroup, this.enemyGroup, (obj1, obj2) => {
+        //     const food = obj1 as Food;
+        //     const enemy = obj2 as Enemy;
+        //     food.reset();
+        //     enemy.boost(food);
+        // });
     }
 
     update(time: number) {
+        if (this.gameState === GameState.END) {
+            return;
+        }
+
         this.player.update(this.cursors, time);
         this.enemyGroup.update();
         this.scoreBoard.update();
@@ -46,7 +74,10 @@ export class GameScene extends Phaser.Scene {
     private createPlayer() {
         this.player = new Player(this);
         this.player.on(PlayerEvents.DIE, () => {
-            this.scene.start(SCENE_KEYS.END);
+            this.gameState = GameState.END;
+            setTimeout(() => {
+                this.scene.start(SCENE_KEYS.END);
+            }, 1000);
         });
     }
 

@@ -4,8 +4,8 @@ import { ANIMATION_KEYS } from '../../constants';
 import { enemySettings } from './settings';
 import { globalSettings } from '../../settings';
 import { randomInteger } from '../../utils';
-import { Food } from '../Food/Food';
 import { GameObject, GameObjectConfig } from "../GameObject/GameObject";
+import { Damage } from '../Effect/Damage';
 
 export interface EnemyConfig extends Pick<GameObjectConfig, 'speed'> {};
 
@@ -30,8 +30,8 @@ export class Enemy extends GameObject {
         this.play(ANIMATION_KEYS.IDLE);
     }
 
-    getDamage() {
-        return this.damage;
+    getDamageEffect(): Damage {
+        return new Damage(this.damage);
     }
 
     update() {
@@ -49,7 +49,7 @@ export class Enemy extends GameObject {
         }
     }
 
-    boost(food: Food) {
+    boost() {
         switch(this.velocityVector) {
             case VelocityVector.TOP_TO_BOTTOM: {
                 this.setVelocityY(enemySettings.boostSpeed);
@@ -68,8 +68,6 @@ export class Enemy extends GameObject {
                 break;
             }
         }
-
-        food.reset();
     }
 
     reset() {

@@ -1,10 +1,9 @@
 import Phaser from "phaser";
 import { ANIMATION_KEYS } from '../../constants';
-import { Food } from "../Food/Food";
 import { GameObject } from "../GameObject/GameObject";
 import { playerSettings } from './settings';
-import { Enemy } from '../Enemy/Enemy';
 import { ASSETS_MAP_KEY } from '../../assets';
+import { Effect } from '../Effect/Effect';
 
 /**
  * move direction:
@@ -30,10 +29,10 @@ export enum PlayerEvents {
 }
 
 export class Player extends GameObject {
-    private health: number;
+    private health: number = 0;
     private satiety: number;
-    private lastEatTime!: number;
     private gameState: PlayerGameState = PlayerGameState.IDLE;
+    private effects: Effect[] = [];
 
     constructor (scene: Phaser.Scene) {
         super(scene, {
@@ -53,6 +52,9 @@ export class Player extends GameObject {
             return;
         }
 
+        this.checkEffects();
+        this.updateEffects();
+
         this.setVelocity(0);
         const shouldMove = (
             cursors.left.isDown ||
@@ -64,11 +66,6 @@ export class Player extends GameObject {
         let directionMove = this.getDirectionMove(cursors);
         this.updateVelocity(directionMove);
 
-        if (this.lastEatTime + playerSettings.hungerTime < time) {
-            this.lastEatTime = time;
-            this.updateSetiety(playerSettings.hunger);
-        }
-
         if (shouldMove) {
             this.toggleMoveAnimations(true, directionMove);
         } else if (!shouldMove && this.isMoving()) {
@@ -76,6 +73,8 @@ export class Player extends GameObject {
         }
 
         this.checkDieStatus();
+
+        console.log(this.satiety, this.health);
     }
 
     getSpeed() {
@@ -83,35 +82,35 @@ export class Player extends GameObject {
     }
 
     getHealth() {
-        return this.health || 0;
+        return this.health;
     }
 
     getSatiety() {
         return this.satiety || 0;
     }
 
-    setDamage(enemy: Enemy) {
-        this.updateSetiety(-enemy.getDamage());
-        enemy.reset();
-    }
-
-    eat(food: Food) {
-        this.updateSetiety(food.getSaturation());
-        this.lastEatTime = this.scene.time.now;
-
-        food.reset();
-    }
-
     die() {
         this.setVelocity(0);
         this.playAnimation(ANIMATION_KEYS.DIE);
-
-        setTimeout(() => {
-            this.emit(PlayerEvents.DIE);
-        }, 1000);
+        this.emit(PlayerEvents.DIE);
     }
 
-    playAnimation(key: ANIMATION_KEYS, ignoreIfPlaying?: boolean) {
+    addEffect(effect: Effect) {
+        this.effects.push(effect);
+        effect.start(this, this.scene.time.now);
+    }
+
+    removeEffect(effect: Effect) {
+        effect.isEnded = true;
+    }
+
+    updateSetiety(saturation: number) {
+        this.setScale(this.scale + saturation / playerSettings.scaleQ);
+        this.satiety += saturation / playerSettings.satietyQ;
+        this.health += saturation;
+    }
+
+    private playAnimation(key: ANIMATION_KEYS, ignoreIfPlaying?: boolean) {
         super.play(key as string, ignoreIfPlaying);
 
         switch(key) {
@@ -132,8 +131,6 @@ export class Player extends GameObject {
     protected init() {
         super.init();
 
-        this.lastEatTime = this.scene.time.now;;
-
         this.setCollideWorldBounds(true);
         this.createAnimations();
     }
@@ -145,12 +142,6 @@ export class Player extends GameObject {
     private isMoving() {
         return this.gameState !== PlayerGameState.DIE &&
             this.gameState !== PlayerGameState.IDLE;
-    }
-
-    private updateSetiety(saturation: number) {
-        this.setScale(this.scale + saturation / playerSettings.scaleQ);
-        this.satiety += saturation / playerSettings.satietyQ;
-        this.health += saturation;
     }
 
     private updateVelocity(direction: number) {
@@ -320,5 +311,20 @@ export class Player extends GameObject {
         if (isEnd) {
             this.die();
         }
+    }
+
+    private checkEffects() {
+        this.effects = this.effects.filter((effect) => {
+            if (effect.isEnded) {
+                effect.end(this.scene.time.now);
+            }
+            return !effect.isEnded;
+        });
+    }
+
+    private updateEffects() {
+        this.effects.forEach((effect) => {
+            effect.update(this.scene.time.now);
+        })
     }
 }
