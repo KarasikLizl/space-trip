@@ -4,8 +4,8 @@ import { ANIMATION_KEYS } from '../../constants';
 import { enemySettings } from './settings';
 import { globalSettings } from '../../settings';
 import { randomInteger } from '../../utils';
-import { Food } from '../Food/Food';
 import { GameObject, GameObjectConfig } from "../GameObject/GameObject";
+import { Damage } from '../Effect/Damage';
 
 export interface EnemyConfig extends Pick<GameObjectConfig, 'speed'> {};
 
@@ -27,11 +27,36 @@ export class Enemy extends GameObject {
             y: -500,
         });
 
+        this.setSize(enemySettings.width, enemySettings.height);
+        this.body.setSize(enemySettings.width, enemySettings.height);
         this.play(ANIMATION_KEYS.IDLE);
     }
 
-    getDamage() {
-        return this.damage;
+    setSpeed(speed: number) {
+        super.setSpeed(speed);
+
+        switch(this.velocityVector) {
+            case VelocityVector.TOP_TO_BOTTOM: {
+                this.setVelocityY(this.speed);
+                break;
+            }
+            case VelocityVector.RIGHT_TO_LEFT: {
+                this.setVelocityX(-this.speed);
+                break;
+            }
+            case VelocityVector.BOTTOM_TO_TOP: {
+                this.setVelocityY(-this.speed);
+                break;
+            }
+            case VelocityVector.LEFT_TO_RIGHT: {
+                this.setVelocityX(this.speed);
+                break;
+            }
+        }
+    }
+
+    getDamageEffect(): Damage {
+        return new Damage(this.damage);
     }
 
     update() {
@@ -49,35 +74,12 @@ export class Enemy extends GameObject {
         }
     }
 
-    boost(food: Food) {
-        switch(this.velocityVector) {
-            case VelocityVector.TOP_TO_BOTTOM: {
-                this.setVelocityY(enemySettings.boostSpeed);
-                break;
-            }
-            case VelocityVector.RIGHT_TO_LEFT: {
-                this.setVelocityX(-enemySettings.boostSpeed);
-                break;
-            }
-            case VelocityVector.BOTTOM_TO_TOP: {
-                this.setVelocityY(-enemySettings.boostSpeed);
-                break;
-            }
-            case VelocityVector.LEFT_TO_RIGHT: {
-                this.setVelocityX(enemySettings.boostSpeed);
-                break;
-            }
-        }
-
-        food.reset();
-    }
-
     reset() {
         const coords = this.getStartEnemyCoords();
         this.setX(coords.x);
         this.setY(coords.y);
         this.damage = this.getRandomDamage();
-        this.updateVelocity();
+        this.initMovement();
     }
 
     protected init() {
@@ -86,27 +88,25 @@ export class Enemy extends GameObject {
         this.createAnimations();
     }
 
-    private updateVelocity() {
+    private initMovement() {
         const isHorizontalVector = this.x < 0 || this.x > Number(globalSettings.width);
         this.setVelocity(0);
 
         if(isHorizontalVector) {
             if (this.x < 0) {
                 this.velocityVector = VelocityVector.LEFT_TO_RIGHT;
-                this.setVelocityX(enemySettings.speed);
             } else {
                 this.velocityVector = VelocityVector.RIGHT_TO_LEFT;
-                this.setVelocityX(-enemySettings.speed);
             }
         } else {
             if (this.y < 0) {
                 this.velocityVector = VelocityVector.TOP_TO_BOTTOM;
-                this.setVelocityY(enemySettings.speed);
             } else {
                 this.velocityVector = VelocityVector.BOTTOM_TO_TOP;
-                this.setVelocityY(-enemySettings.speed);
             }
         };
+
+        this.setSpeed(enemySettings.speed);
     }
 
     private getStartEnemyCoords(): Phaser.Math.Vector2 {
@@ -150,7 +150,7 @@ export class Enemy extends GameObject {
     protected createAnimations() {
         this.anims.create({
             key: ANIMATION_KEYS.IDLE,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { start: 0, end: 18 }),
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [randomInteger(0, 3)] }),
             frameRate: 19,
             repeat: -1,
         });

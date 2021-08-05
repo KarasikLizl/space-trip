@@ -9,8 +9,10 @@ export const enemySettings = {
     minDamage: 10,
     // Максимальный урон врага.
     maxDamage: 25,
-    // Скорость врага после поедания еды.
-    boostSpeed: 400,
+    // Ширина спрайта
+    width: 48,
+    // Высота спрайта
+    height: 48,
 };
 
 export const enemyGroupSettings = {

@@ -16,6 +16,9 @@ export class EnemyGroup extends Phaser.Physics.Arcade.Group {
     protected async init() {
         for(let i = 0; i < enemyGroupSettings.maxEnemiesOnScene; i ++) {
             await wait(enemyGroupSettings.createDelay);
+            if (!this.active) {
+                return;
+            }
             const enemy = new Enemy(this.scene, { speed: 0 });
             this.enemies.push(enemy);
             this.add(enemy);
@@ -26,5 +29,10 @@ export class EnemyGroup extends Phaser.Physics.Arcade.Group {
 
     update() {
         this.enemies.forEach((enemy) => enemy.update());
+    }
+
+    stop() {
+        this.enemies.forEach((enemy) => enemy.stop());
+        this.active = false;
     }
 }
