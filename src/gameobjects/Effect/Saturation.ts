@@ -3,7 +3,7 @@ import { Effect, EffectTarget } from './Effect';
 
 export class Saturation extends Effect {
     private saturation: number;
-    protected duration: number = 2000;
+    protected duration: number = 0;
 
     constructor(damage: number) {
         super();
@@ -15,14 +15,6 @@ export class Saturation extends Effect {
         super.start(target, now);
         if (this.target instanceof Player) {
             this.target.updateSetiety(this.saturation);
-        }
-    }
-
-    end(now: number) {
-        super.end(now);
-
-        if (this.target instanceof Player) {
-            this.target.updateSetiety(-this.saturation);
         }
     }
 }

@@ -8,7 +8,7 @@ import { Saturation } from '../Effect/Saturation';
 
 export interface FoodConfig extends Pick<GameObjectConfig, 'speed'> {}
 
-const SPRITESHEET_FRAMES_COUNT = 3;
+const SPRITESHEET_FRAMES_COUNT = 23;
 
 export class Food extends GameObject {
     private saturation: number = 0;
