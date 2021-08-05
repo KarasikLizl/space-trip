@@ -27,8 +27,7 @@ export class Enemy extends GameObject {
             y: -500,
         });
 
-        this.setSize(enemySettings.width, enemySettings.height);
-        this.body.setSize(enemySettings.width, enemySettings.height);
+        this.setScale(2);
         this.play(ANIMATION_KEYS.IDLE);
     }
 
@@ -150,7 +149,7 @@ export class Enemy extends GameObject {
     protected createAnimations() {
         this.anims.create({
             key: ANIMATION_KEYS.IDLE,
-            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [randomInteger(0, 3)] }),
+            frames: this.anims.generateFrameNumbers(ASSETS_MAP_KEY.enemy, { frames: [3] }),
             frameRate: 19,
             repeat: -1,
         });
