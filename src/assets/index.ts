@@ -1,6 +1,6 @@
 import player from './sprites/player.png';
 import enemy from './sprites/enemy.png';
-import background from './background.jpg';
+import background from './background.png';
 import food from './sprites/food.png';
 
 export const ASSETS_MAP = {

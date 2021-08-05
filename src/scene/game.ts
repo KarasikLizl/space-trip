@@ -8,11 +8,7 @@ import { Enemy } from '../gameobjects/Enemy/Enemy';
 import { EnemyGroup } from '../gameobjects/Enemy/EnemyGroup';
 import { FoodGroup } from '../gameobjects/Food/FoodGroup';
 import { Speed } from '../gameobjects/Effect/Speed';
-
-enum GameState {
-    RUN = 'run',
-    END = 'end',
-}
+import { globalSettings } from '../settings';
 
 export class GameScene extends Phaser.Scene {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -20,7 +16,6 @@ export class GameScene extends Phaser.Scene {
     private foodGroup!: FoodGroup;
     private enemyGroup!: EnemyGroup;
     private scoreBoard!: ScoreBoard;
-    private gameState: GameState = GameState.RUN;
 
     constructor() {
         super(SCENE_KEYS.GAME);
@@ -32,7 +27,13 @@ export class GameScene extends Phaser.Scene {
 
     create() {
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.add.image(0, 0, ASSETS_MAP_KEY.background).setScale(2);
+        const globalWidth = Number(globalSettings.width);
+        const globalHeight = Number(globalSettings.height);
+        const background = this.add.image(globalWidth / 2, globalHeight / 2, ASSETS_MAP_KEY.background)
+            .setOrigin(.5, .5);
+        // Based on your game size, it may "stretch" and distort.
+        background.displayWidth = Number(globalSettings.width);
+        background.displayHeight = Number(globalSettings.height);
 
         this.createPlayer();
         this.createFoods();
@@ -64,10 +65,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     update(time: number) {
-        if (this.gameState === GameState.END) {
-            return;
-        }
-
         this.player.update(this.cursors);
         this.enemyGroup.update();
         this.scoreBoard.update();
@@ -76,10 +73,10 @@ export class GameScene extends Phaser.Scene {
     private createPlayer() {
         this.player = new Player(this);
         this.player.on(PlayerEvents.DIE, () => {
-            this.gameState = GameState.END;
-            setTimeout(() => {
-                this.scene.start(SCENE_KEYS.END);
-            }, 1000);
+            this.player.stop();
+            this.foodGroup.stop();
+            this.enemyGroup.stop();
+            this.scene.start(SCENE_KEYS.END);
         });
     }
 

@@ -32,6 +32,13 @@ export class GameObject extends Phaser.Physics.Arcade.Sprite {
         effect.isEnded = true;
     }
 
+    stop() {
+        super.stop();
+        this.active = false;
+
+        return this;
+    }
+
     protected init() {
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
