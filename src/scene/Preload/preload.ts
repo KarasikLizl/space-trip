@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { ASSETS_MAP, ASSETS_MAP_KEY } from '../../assets';
 import { SCENE_KEYS } from '../../constants';
-import { uiSettings } from '../../settings';
+import { globalSettings, uiSettings } from '../../settings';
 import { logger } from '../../utils';
 
 export class PreloadScene extends Phaser.Scene {
@@ -26,7 +26,11 @@ export class PreloadScene extends Phaser.Scene {
                 families: [ uiSettings.font ],
             },
             active: () => {
-                this.scene.start(SCENE_KEYS.MENU);
+                if (Number(globalSettings.width) < 1000 || Number(globalSettings.height) < 500) {
+                    this.scene.start(SCENE_KEYS.MOBILE_ERROR);
+                } else {
+                    this.scene.start(SCENE_KEYS.MENU);
+                }
             },
         });
     }
