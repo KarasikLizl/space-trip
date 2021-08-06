@@ -33,7 +33,7 @@ export enum PlayerEvents {
 export class Player extends GameObject {
     private health: number = 0;
     private satiety: number;
-    private gameState: PlayerGameState = PlayerGameState.IDLE;
+    state: PlayerGameState = PlayerGameState.IDLE;
 
     constructor (scene: Phaser.Scene) {
         super(scene, {
@@ -116,13 +116,13 @@ export class Player extends GameObject {
 
         switch(key) {
             case ANIMATION_KEYS.IDLE:
-                this.gameState = PlayerGameState.IDLE;
+                this.state = PlayerGameState.IDLE;
                 break;
             case ANIMATION_KEYS.DIE:
-                this.gameState = PlayerGameState.DIE;
+                this.state = PlayerGameState.DIE;
                 break;
             default:
-                this.gameState = PlayerGameState.MOVING;
+                this.state = PlayerGameState.MOVING;
                 break;
         }
 
@@ -137,12 +137,12 @@ export class Player extends GameObject {
     }
 
     private isDead() {
-        return this.gameState === PlayerGameState.DIE;
+        return this.state === PlayerGameState.DIE;
     }
 
     private isMoving() {
-        return this.gameState !== PlayerGameState.DIE &&
-            this.gameState !== PlayerGameState.IDLE;
+        return this.state !== PlayerGameState.DIE &&
+            this.state !== PlayerGameState.IDLE;
     }
 
     private updateVelocity(direction: number) {
