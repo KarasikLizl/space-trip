@@ -3,6 +3,8 @@ import Phaser from 'phaser';
 const body = document.querySelector('body');
 const bodyRect = body?.getBoundingClientRect();
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export const globalSettings: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     width: bodyRect?.width || 0,
@@ -10,7 +12,7 @@ export const globalSettings: Phaser.Types.Core.GameConfig = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: isDev,
             gravity: { y: 0 },
         }
     },
