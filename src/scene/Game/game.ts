@@ -1,14 +1,12 @@
 import { SCENE_KEYS } from '../../constants';
 import { Food } from '../../gameobjects/Food/Food';
 import { Player, PlayerEvents } from '../../gameobjects/Player/Player';
-import { logger } from '../../utils';
+import { createBackground, logger } from '../../utils';
 import { ScoreBoard } from '../../gameobjects/ScoreBoard/ScoreBoard';
-import { ASSETS_MAP_KEY } from '../../assets';
 import { Enemy } from '../../gameobjects/Enemy/Enemy';
 import { EnemyGroup } from '../../gameobjects/Enemy/EnemyGroup';
 import { FoodGroup } from '../../gameobjects/Food/FoodGroup';
 import { Speed } from '../../gameobjects/Effect/Speed';
-import { globalSettings } from '../../settings';
 
 export class GameScene extends Phaser.Scene {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -27,13 +25,7 @@ export class GameScene extends Phaser.Scene {
 
     create() {
         this.cursors = this.input.keyboard.createCursorKeys();
-        const globalWidth = Number(globalSettings.width);
-        const globalHeight = Number(globalSettings.height);
-        const background = this.add.image(globalWidth / 2, globalHeight / 2, ASSETS_MAP_KEY.background)
-            .setOrigin(.5, .5);
-        // Based on your game size, it may "stretch" and distort.
-        background.displayWidth = Number(globalSettings.width);
-        background.displayHeight = Number(globalSettings.height);
+        createBackground(this);
 
         this.createPlayer();
         this.createFoods();

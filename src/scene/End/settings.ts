@@ -10,5 +10,11 @@ export const endSettings =  {
             fontColor: '#fff',
             text: '( нажмите в любое место, что бы начать заново )',
         }
-    }
+    },
+    player:{
+        startPositionX: 20,
+        startPositionY: 20,
+        minSpeed: 25,
+        maxSpeed: 50,
+    },
 }
