@@ -24,6 +24,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     create() {
+
         this.cursors = this.input.keyboard.createCursorKeys();
         createBackground(this);
 

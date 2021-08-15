@@ -18,4 +18,5 @@ export enum SCENE_KEYS {
     GAME = 'game',
     END = 'end',
     MOBILE_ERROR = 'mobile_error',
+    WIN = 'win',
 };
