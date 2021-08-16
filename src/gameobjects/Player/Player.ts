@@ -80,7 +80,7 @@ export class Player extends GameObject {
     }
 
     getSpeed() {
-        return this.speed * (1 / this.satiety);
+        return this.speed;
     }
 
     getHealth() {
