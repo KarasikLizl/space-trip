@@ -16,7 +16,6 @@ export const logger = (...args: any[]) => {
 export const wait = async (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
 export interface WandingConfig {
     maxSpeed: number;
     minSpeed: number;
@@ -63,3 +62,6 @@ export const infinityRotate = (object: Phaser.Physics.Arcade.Sprite, speed: numb
         object.setAngle(object.angle + speed);
     }
 }
+
+export const min = 1000 * 60;
+export const hour = min * 60;

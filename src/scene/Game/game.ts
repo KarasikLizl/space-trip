@@ -1,12 +1,13 @@
 import { SCENE_KEYS } from '../../constants';
 import { Food } from '../../gameobjects/Food/Food';
 import { Player, PlayerEvents } from '../../gameobjects/Player/Player';
-import { createBackground, logger } from '../../utils';
+import { createBackground, logger, randomInteger } from '../../utils';
 import { ScoreBoard } from '../../gameobjects/ScoreBoard/ScoreBoard';
 import { Enemy } from '../../gameobjects/Enemy/Enemy';
 import { EnemyGroup } from '../../gameobjects/Enemy/EnemyGroup';
 import { FoodGroup } from '../../gameobjects/Food/FoodGroup';
 import { Speed } from '../../gameobjects/Effect/Speed';
+import { gameSettings } from './settings';
 
 export class GameScene extends Phaser.Scene {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -14,6 +15,8 @@ export class GameScene extends Phaser.Scene {
     private foodGroup!: FoodGroup;
     private enemyGroup!: EnemyGroup;
     private scoreBoard!: ScoreBoard;
+    private winTime: number = randomInteger(gameSettings.minWinTimeMs, gameSettings.maxWinTimeMs);
+    private startTime!: number;
 
     constructor() {
         super(SCENE_KEYS.GAME);
@@ -24,7 +27,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     create() {
-
         this.cursors = this.input.keyboard.createCursorKeys();
         createBackground(this);
 
@@ -55,9 +57,12 @@ export class GameScene extends Phaser.Scene {
             enemy.addEffect(speedEffect);
             food.reset();
         });
+
+        this.startTime = this.time.now;
     }
 
-    update(time: number) {
+    update() {
+        this.checkGameTime();
         this.player.update(this.cursors);
         this.enemyGroup.update();
         this.scoreBoard.update(this.player);
@@ -83,5 +88,11 @@ export class GameScene extends Phaser.Scene {
 
     private createScoreBoard() {
         this.scoreBoard = new ScoreBoard(this);
+    }
+
+    private checkGameTime() {
+        if (this.startTime + this.winTime < this.time.now) {
+            this.scene.start(SCENE_KEYS.WIN);
+        }
     }
 }

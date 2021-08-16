@@ -3,7 +3,7 @@ import { ASSETS_MAP_KEY } from '../../assets';
 import { SCENE_KEYS } from '../../constants';
 import { globalSettings, uiSettings } from '../../settings';
 import { logger, randomInteger } from '../../utils';
-import { winSettings } from './winsettings';
+import { winSettings } from './settings';
 
 export class WinScene extends Phaser.Scene {
     private backgroundPlayer!: Phaser.Physics.Arcade.Sprite;
